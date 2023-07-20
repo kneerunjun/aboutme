@@ -1,0 +1,29 @@
+version: '3.1'
+
+services:
+  aboutmeweb:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - SRC=${SRCDIR}
+        - LOG=${LOGDIR}
+        - RUN=${RUNDIR}
+        - ETC=${ETCDIR}
+        - BIN=${BINDIR}
+        - APPNAME=${APPNAME}
+        - STATICDIR=${STATICDIR}
+    environment:
+      - DIR_STATIC=${STATICDIR}
+    ports:
+      - 8080:8080
+    volumes:
+      - ${LOGDIR}:${LOGDIR}
+      - ./www:${STATICDIR}
+    container_name: ctn_web
+    networks:
+      - dev-network
+    entrypoint: ["${BINDIR}/entry.sh","-v ${VERBOSE}", "-f ${FLOG}"]
+networks:
+  dev-network:
+    driver: bridge

@@ -73,6 +73,8 @@ func main() {
 	r := gin.Default()
 
 	r.Static("/images", fmt.Sprintf("%s/images/", dirStatic))
+	r.Static("/js", fmt.Sprintf("%s/js/", dirStatic))
+	r.Static("/views", fmt.Sprintf("%s/views/", dirStatic))
 	r.LoadHTMLGlob(fmt.Sprintf("%s/pages/*", dirStatic))
 
 	r.GET("/ping", func(c *gin.Context) {

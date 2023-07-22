@@ -1,6 +1,21 @@
 version: '3.1'
 
 services:
+  mongostore:
+    image: mongo:4.2-bionic
+    ports:
+        - 47017:27017
+    volumes: 
+      - /data/aboutme:/data/db
+    healthcheck:
+      # NOTE: other services can only start running when this service is up and running
+      # NOTE: other services will run this test to know if this service is up
+      test: "exit 0"
+    tty: true
+    stdin_open: true
+    container_name: ctn_aboutmestore
+    networks:
+      - dev-network
   aboutmeweb:
     build:
       context: .
@@ -15,15 +30,21 @@ services:
         - STATICDIR=${STATICDIR}
     environment:
       - DIR_STATIC=${STATICDIR}
+      - LOG_VERBOSITY=${VERBOSE}
+      - FILE_LOG=${FLOG}
+      - DB_SEED=${SEED}
     ports:
       - 8080:8080
     volumes:
       - ${LOGDIR}:${LOGDIR}
       - ./www:${STATICDIR}
+    depends_on:
+      mongostore:
+        condition: service_healthy
     container_name: ctn_web
     networks:
       - dev-network
-    entrypoint: ["${BINDIR}/entry.sh","-v ${VERBOSE}", "-f ${FLOG}"]
+    entrypoint: ["${BINDIR}/entry.sh"]
 networks:
   dev-network:
     driver: bridge

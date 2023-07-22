@@ -12,29 +12,7 @@ _term(){
 trap _term SIGTERM #so as to pass it down
 echo "starting cron deamon..."
 # /usr/sbin/crond -f -l 8&
-
-
-# getting all the command line arguments 
-verbose="false"
-filelog="false"
-while getopts ":v:f:s:" o; do
-    case "${o}" in
-        v)
-            verbose=${OPTARG}
-            ;;
-        f)
-            filelog=${OPTARG}
-            ;;
-        *)
-            usage
-            ;;
-    esac
-done
-echo $verbose
-echo $filelog
-# TODO: change the app name here else the entrypoint to the container will fail
-/usr/bin/aboutmeweb -verbose $verbose -flog $filelog&
-
+/usr/bin/aboutmeweb&
 # waiting for the go application
 child=$!
 wait "$child"

@@ -13,9 +13,6 @@ RUN apk add git
 RUN mkdir -p ${SRC} && mkdir -p ${LOG} && mkdir -p ${RUN} && mkdir -p ${ETC} && mkdir -p ${STATICDIR}/{pages,images,js}
 WORKDIR ${SRC}
 # # getting  all the shells to an executable location
-COPY ./shells/ ${BIN} 
-RUN chmod -R +x ${BIN}
-
 # RUN touch mycron
 # RUN crontab -l > mycron
 # # cron that runs every minute t call the trigger
@@ -27,6 +24,10 @@ RUN chmod -R +x ${BIN}
 # RUN rm mycron
 # https://stackoverflow.com/questions/30215830/dockerfile-copy-keep-subdirectory-structure
 # since we want the entire directory structure recursively to be copied onto the container
-COPY . .
+COPY go.mod go.sum ./
 RUN go mod download 
+
+COPY ./shells/ ${BIN} 
+RUN chmod -R +x ${BIN}
+COPY . .
 RUN go build -o ${BIN}/${APPNAME} .

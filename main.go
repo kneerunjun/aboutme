@@ -11,8 +11,9 @@ import (
 )
 
 var (
-	FVerbose, FLogF bool
-	logFile         string
+	FVerbose, FLogF, FSeed bool
+	logFile                string
+	// IMP: setting this to true would mean all the recent changes to the dtabase are lost and overriden with seed data from within the code
 )
 
 func init() {
@@ -23,18 +24,33 @@ func init() {
 	-flog=false: all the log output shall be on stdout
 	- We are setting the default log level to be Info level
 	======================= */
-	flag.BoolVar(&FVerbose, "verbose", false, "Level of logging messages are set here")
-	flag.BoolVar(&FLogF, "flog", false, "Direction in which the log should output")
+	// flag.BoolVar(&FVerbose, "verbose", false, "Level of logging messages are set here")
+	// flag.BoolVar(&FLogF, "flog", false, "Direction in which the log should output")
+	// flag.BoolVar(&FSeed, "dbseed", false, "flag to force seed the database, use it at your own risk")
+
+	if val := os.Getenv("LOG_VERBOSITY"); val == "y" {
+		FVerbose = true
+	}
+	if val := os.Getenv("FILE_LOG"); val == "y" {
+		FLogF = true
+	}
+	if val := os.Getenv("DB_SEED"); val == "y" {
+		FSeed = true
+	}
+
 	// Setting up log configuration for the api
 	log.SetFormatter(&log.TextFormatter{
 		DisableColors: false,
-		FullTimestamp: true,
+		FullTimestamp: false,
 	})
 	log.SetReportCaller(false)
 	// By default the log output is stdout and the level is info
 	log.SetOutput(os.Stdout)     // FLogF will set it main, but dfault is stdout
 	log.SetLevel(log.DebugLevel) // default level info debug but FVerbose will set it main
 	logFile = os.Getenv("LOGF")
+	log.WithFields(log.Fields{
+		"seed": FSeed,
+	}).Debug("now chcking for the seed variable")
 }
 
 // ServeIndexHtml : will dispatch the index.html page
@@ -47,6 +63,7 @@ func main() {
 	log.WithFields(log.Fields{
 		"verbose": FVerbose,
 		"flog":    FLogF,
+		"seed":    FSeed,
 	}).Info("Log configuration..")
 	if FVerbose {
 		log.SetLevel(log.DebugLevel)
@@ -62,6 +79,13 @@ func main() {
 			log.SetOutput(lf)
 		}
 	}
+	if FSeed {
+		log.Warn("Seed flag set to true, flushing the data. This will be replaced with seed data..")
+		FlushDB()
+		if err := NiranjanAwati(); err != nil {
+			log.WithFields(log.Fields{"err": err}).Error("Error seeding the database")
+		}
+	}
 	// Loading all environment variables
 	dirStatic := os.Getenv("DIR_STATIC")
 	log.WithFields(log.Fields{
@@ -69,6 +93,10 @@ func main() {
 	}).Debug("echoing static directory")
 	log.Info("Starting server..")
 	defer log.Warn("Server now shutting down..")
+
+	// Seed the database only if the seed flag is on
+	// TODO:  incase the seed flag is set the database details have to be dropped
+
 	gin.SetMode(gin.DebugMode)
 	r := gin.Default()
 

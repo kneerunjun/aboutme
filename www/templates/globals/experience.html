@@ -20,17 +20,17 @@
 </div>
 
 <div class="container justify-content-center d-flex d-md-none mt-1">
-    <ul class="list-unstyled">
+    <ol class="list-unstyled">
         {{ range $key, $val := .}}
-        <li class="media">
-          <img class="mr-3" src="{{.ImgSrc}}" alt="company logo" height="{{.ImgHt}}px" width="{{.ImgWd}}px">
+        <li class="media mt-2 text-center">
           <div class="media-body">
-            <h5 class="mt-0 text-primary">{{.Desig}}</h5>
-            <h6>{{.Employer}}</h6>
+            <h5 class="mt-0 text-primary"><i class="fas fa-briefcase mr-3"></i>{{.Desig}}</h5>
+            <h6>{{.Employer}}&Tab;({{.Span}})</h6>
           </div>
+          <!-- <img class="mr-3" src="{{.ImgSrc}}" alt="company logo" height="{{.ImgHt}}px" width="{{.ImgWd}}px"> -->
         </li>
         {{end}}
-    </ul>
+    </ol>
 </div>
 
 {{ end }}

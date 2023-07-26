@@ -167,10 +167,10 @@ func NiranjanAwati() error {
 			{Title: "Pride, Boeing", Year: "2009"},
 		},
 		Experience: []Workexp{
-			{ImgSrc: "/images/infy_logo.png", ImgHt: 40, ImgWd: 60, Desig: "Pr.Consultant", Employer: "Infosys Ltd.", Span: "2005-2022"},
-			{ImgSrc: "/images/dheeti.jpeg", ImgHt: 40, ImgWd: 60, Desig: "Sr.Developer", Employer: "Dheeti Technologies", Span: "2022-2022"},
-			{ImgSrc: "/images/ncs_logo.png", ImgHt: 40, ImgWd: 60, Desig: "Sr.Programmer", Employer: "NCS Technologies", Span: "2022-2023"},
-			{ImgSrc: "/images/persistent_logo.png", ImgHt: 40, ImgWd: 60, Desig: "Sr.Architect", Employer: "Persistent", Span: "2023-today"},
+			{ImgSrc: "/images/infy_logo.png", ImgHt: 40, ImgWd: 60, Desig: "Pr. Consultant", Employer: "Infosys Ltd.", Span: "2005-2022"},
+			{ImgSrc: "/images/dheeti.jpeg", ImgHt: 45, ImgWd: 40, Desig: "Sr. Developer", Employer: "Dheeti Technologies", Span: "2022-2022"},
+			{ImgSrc: "/images/ncs_logo.png", ImgHt: 45, ImgWd: 50, Desig: "Sr. Programmer", Employer: "NCS Technologies", Span: "2022-2023"},
+			{ImgSrc: "/images/persistent_logo.png", ImgHt: 45, ImgWd: 50, Desig: "Sr. Architect", Employer: "Persistent", Span: "2023-today"},
 		},
 	}
 	if err := AddResume(res); err != nil {

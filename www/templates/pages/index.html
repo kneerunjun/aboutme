@@ -4,13 +4,19 @@
 <head>
     {{ template "globals/head.html"}}
     <title>{{.Title}}</title>
+    <style>
+        .profile-photo{
+            outline: 3px solid #4c9be8;
+            outline-offset: 3px;
+        }
+    </style>
 </head>
 
 <body>
     <div class="container-sm mt-5">
         <div class="container media d-none d-md-flex">
-            <img src="/images/meb_w.jpg" class="rounded-circle mr-5" width="{{.Photo.WidthPx}}px" height="{{.Photo.HeightPx}}px"
-            alt="niranjan_cover_image">
+            <img src="/images/meb_w.jpg" class="rounded-circle mr-5 profile-photo" width="{{.Photo.WidthPx}}px" height="{{.Photo.HeightPx}}px"
+            alt="niranjan_cover_image" >
             <div class="media-body">
                 <h2 class="mt-0">{{.FullName}}</h2>
                 <hr class="hr">
@@ -18,7 +24,7 @@
             </div>
         </div>
         <div class="container media d-block d-md-none text-center">
-            <img src="/images/meb_w.jpg" class="rounded-circle " width="{{.Photo.WidthPx}}px" height="{{.Photo.HeightPx}}px"
+            <img src="/images/meb_w.jpg" class="rounded-circle profile-photo" width="{{.Photo.WidthPx}}px" height="{{.Photo.HeightPx}}px"
             alt="niranjan_cover_image">
             <div class="text-center">
                 <h2 class="mt-3">{{.FullName}}</h2>

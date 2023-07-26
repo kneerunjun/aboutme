@@ -1,0 +1,15 @@
+{{ define "globals/educ-banner.html" }}
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title text-info d-none d-md-block"><i class="fas fa-graduation-cap"></i>&Tab;{{.Degree}}</h4>
+                  <h4 class="card-title text-info d-md-none d-block"><i class="fas fa-graduation-cap"></i>&Tab;{{.ShortDegree}}</h4>
+                  <h6 class="card-subtitle mb-2 text-info">{{.GovnBody}}</h6>
+                  <p class="card-text d-none d-md-block">{{.Desc}} </p>
+                  <p class="card-text d-block d-md-none">{{.ShortDesc}} </p>
+                </div>
+              </div>
+        </div>
+    </div>
+{{ end }}

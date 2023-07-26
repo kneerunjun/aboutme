@@ -1,0 +1,20 @@
+{{ define "globals/top-accolades.html" }}
+<div class="row justify-content-center">
+    <div class="col-12 text-center">
+        <h2>Accolades</h2>
+        <hr class="hr">
+    </div>
+    <div class="col-12 col-md-4">
+        <ul class="list-group">
+            {{ range $key, $val := .}}
+            {{ if (le $key 3)}}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <i class="fas fa-trophy"></i>{{.Title}}
+                <span class="badge bg-primary rounded-pill">{{.Year}}</span>
+            </li>
+            {{ end }}
+            {{ end }}
+        </ul>
+    </div>
+</div>
+{{ end }}

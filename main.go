@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"net/http"
@@ -8,6 +9,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
+	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 )
 
 var (
@@ -17,17 +20,6 @@ var (
 )
 
 func init() {
-	/* ======================
-	-verbose=true would mean log.Debug can work
-	-verbose=false would mean log.Debug will be hidden
-	-flog=true: all the log output shall be onto a file
-	-flog=false: all the log output shall be on stdout
-	- We are setting the default log level to be Info level
-	======================= */
-	// flag.BoolVar(&FVerbose, "verbose", false, "Level of logging messages are set here")
-	// flag.BoolVar(&FLogF, "flog", false, "Direction in which the log should output")
-	// flag.BoolVar(&FSeed, "dbseed", false, "flag to force seed the database, use it at your own risk")
-
 	if val := os.Getenv("LOG_VERBOSITY"); val == "y" {
 		FVerbose = true
 	}
@@ -42,6 +34,7 @@ func init() {
 	log.SetFormatter(&log.TextFormatter{
 		DisableColors: false,
 		FullTimestamp: false,
+		ForceColors:   true,
 	})
 	log.SetReportCaller(false)
 	// By default the log output is stdout and the level is info
@@ -53,9 +46,63 @@ func init() {
 	}).Debug("now chcking for the seed variable")
 }
 
-// ServeIndexHtml : will dispatch the index.html page
+func InsertDBConn(c *gin.Context) {
+	resumeColl, err := NewDbConn(&MongoConfig{dbName: DB_NAME, collName: COLL_NAME})
+	if err != nil {
+		log.Error("failed to connect to database")
+		c.AbortWithStatus(http.StatusBadGateway)
+		return
+	}
+	c.Set("conn", resumeColl)
+}
 func ServeIndexHtml(c *gin.Context) {
-	c.HTML(http.StatusOK, "index.html", gin.H{})
+	c.HTML(http.StatusOK, "index.html", gin.H{"Title": "About me"})
+}
+
+// renderMyProfile : will dispatch the index.html page
+func renderMyProfile(c *gin.Context) {
+	userid, ok := c.Params.Get("userid")
+	if !ok {
+		log.Error("invalid or empty userid for /myprofile")
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	val, ok := c.Get("conn")
+	if !ok {
+		log.Error("Cannot server Html, no connection to database")
+		c.AbortWithStatus(http.StatusBadGateway)
+		return
+	}
+	coll, ok := val.(*mgo.Collection)
+	if !ok {
+		log.Error("invalid object for mgo.Collection, check and try again")
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	result := Resume{}
+	err := coll.Find(bson.M{"id": userid}).One(&result)
+	if err != nil {
+		if errors.Is(err, mgo.ErrNotFound) {
+			log.WithFields(log.Fields{
+				"id": userid,
+			}).Error("failed to get profile of userid")
+			c.AbortWithStatus(http.StatusBadRequest)
+			return
+		} else {
+			// case when the query has failed - this could be of failed gateway , but would be reported as InternalError
+			log.WithFields(log.Fields{
+				"err": err,
+			}).Error("query to get profile failed")
+			c.AbortWithStatus(http.StatusInternalServerError)
+			return
+		}
+	}
+	result.Title = "About me"
+	log.WithFields(log.Fields{
+		"title":    result.Title,
+		"fullname": result.FullName,
+	}).Debug("spitting out the result")
+	c.HTML(http.StatusOK, "index.html", result)
 }
 
 func main() {
@@ -102,14 +149,14 @@ func main() {
 
 	r.Static("/images", fmt.Sprintf("%s/images/", dirStatic))
 	r.Static("/js", fmt.Sprintf("%s/js/", dirStatic))
-	r.Static("/views", fmt.Sprintf("%s/views/", dirStatic))
-	r.LoadHTMLGlob(fmt.Sprintf("%s/pages/*", dirStatic))
+	r.LoadHTMLGlob(fmt.Sprintf("%s/templates/**/*", dirStatic))
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"app": "aboutme",
 		})
 	})
-	r.GET("/", ServeIndexHtml)
+	r.GET("/myprofile/:userid", InsertDBConn, renderMyProfile)
+	// r.GET("/views/:name", InsertDBConn, ServeView)
 	log.Fatal(r.Run(":8080"))
 }

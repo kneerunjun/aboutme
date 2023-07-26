@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{ template "globals/head.html"}}
+    <title>{{.Title}}</title>
+</head>
+
+<body>
+    <div class="container-sm mt-5">
+        <div class="container media d-none d-md-flex">
+            <img src="/images/meb_w.jpg" class="rounded-circle mr-5" width="{{.Photo.WidthPx}}px" height="{{.Photo.HeightPx}}px"
+            alt="niranjan_cover_image">
+            <div class="media-body">
+                <h2 class="mt-0">{{.FullName}}</h2>
+                <hr class="hr">
+                {{.ShortDesc}}
+            </div>
+        </div>
+        <div class="container media d-block d-md-none text-center">
+            <img src="/images/meb_w.jpg" class="rounded-circle " width="{{.Photo.WidthPx}}px" height="{{.Photo.HeightPx}}px"
+            alt="niranjan_cover_image">
+            <div class="text-center">
+                <h2 class="mt-3">{{.FullName}}</h2>
+                <hr class="hr">
+                {{.ShortDescSm}}
+            </div>
+        </div>
+        <div class="container mt-5 ">
+            <!-- educational qualifications -->
+            {{ template "globals/educ-banner.html" .Education}}
+        </div>
+        <div class="container mt-5">
+            {{ template "globals/top-skills.html" .TopSkills}}
+        </div>
+        <div class="container mt-5">
+            {{ template "globals/top-accolades.html" .Accolades}}
+        </div>
+        <div class="container mt-5">
+            {{ template "globals/experience.html" .Experience}}
+        </div>
+        <div class="container mt-5">
+            {{ template "globals/footer.html" .Contact}}
+        </div>
+    </div>
+    
+</body>
+</html>

@@ -1,0 +1,29 @@
+{{ define "globals/footer.html" }}
+<!-- defining the footer of the website
+re-usable template for the footer that has my social media icons and links to emails  -->
+<style>
+    .social-icon {
+        font-size: x-large;
+    }
+    .contact-icon {
+        font-size: larger;
+    }
+</style>
+<footer class=" text-center text-muted">
+    <div>
+        <a target="_blank" href="{{.FBLink}}" class="me-3 link-secondary social-icon"> <i class="fab fa-facebook-f"></i></a>
+        <a target="_blank" href="{{.GmailLink}}" class="me-3 link-secondary social-icon"><i class="fab fa-google"></i></a>
+        <a target="_blank" href="{{.LinkedLink}}" class="me-3 link-secondary social-icon"><i
+                class="fab fa-linkedin"></i></a>
+        <a target="_blank" href="{{.GitLink}}" class="me-3 link-secondary social-icon"><i class="fab fa-github"></i></a>
+    </div>
+    <hr class="hr">
+    <div>
+        <em class="me-3 contact-icon text-muted">{{.Phone}}</em>
+        <a href="{{.GmailLink}}" class="me-3 contact-icon link-secondary">{{.Email}}</a>
+    </div>
+    <div>
+        <em class="me-3 contact-icon text-muted">{{.Address}}</em>
+    </div>
+</footer>
+{{ end }}

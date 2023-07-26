@@ -1,0 +1,36 @@
+{{ define "globals/experience.html" }}
+<div class="col-12 text-center">
+    <h2>Experience</h2>
+    <hr class="hr">
+</div>
+
+<div class="container justify-content-between d-none d-md-flex mt-4">
+    {{ range $key, $val := .}}
+    <div class="media col-3">
+        <img class="align-self-center mr-3 " src="{{.ImgSrc}}" alt="company logo" height="{{.ImgHt}}px"
+            width="{{.ImgWd}}px">
+        <div class="media-body text-primary">
+            <h5 class="mt-0">{{.Desig}}</h5>
+            <hr class="hr">
+            <h6>{{.Employer}}</h6>
+            <h6>({{.Span}})</h6>
+        </div>
+    </div>
+    {{end}}
+</div>
+
+<div class="container justify-content-center d-flex d-md-none mt-1">
+    <ul class="list-unstyled">
+        {{ range $key, $val := .}}
+        <li class="media">
+          <img class="mr-3" src="{{.ImgSrc}}" alt="company logo" height="{{.ImgHt}}px" width="{{.ImgWd}}px">
+          <div class="media-body">
+            <h5 class="mt-0 text-primary">{{.Desig}}</h5>
+            <h6>{{.Employer}}</h6>
+          </div>
+        </li>
+        {{end}}
+    </ul>
+</div>
+
+{{ end }}

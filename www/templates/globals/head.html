@@ -1,7 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
+{{define "globals/head.html"}}
     <base href="/">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,25 +9,22 @@
     <meta property="og:title" content="{{.ogTitle}}" />
     <meta property="og:description" content="{{.ogDesc}}" />
     <meta property="fb:app_id" content="" />
-
-    <title>About me</title>
-    <!-- All the styles here .. -->
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/css/bootstrap.min.css"
-        integrity="sha512-P5MgMn1jBN01asBgU0z60Qk4QxiXo86+wlFahKrsQf37c9cro517WzVSPPV1tDKzhku2iJ2FVgL67wG03SGnNA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.3.0/slate/bootstrap.min.css"
-        integrity="sha512-TSKJb47lA8eqhl9ChXTWG686i5y81CiunKEv24OsK278WJoFov2ZOf/yFTgeb3mcu1ElkNA6R3iDZH+WHbOIWw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    integrity="sha512-P5MgMn1jBN01asBgU0z60Qk4QxiXo86+wlFahKrsQf37c9cro517WzVSPPV1tDKzhku2iJ2FVgL67wG03SGnNA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.3.0/slate/bootstrap.min.css"
+    integrity="sha512-TSKJb47lA8eqhl9ChXTWG686i5y81CiunKEv24OsK278WJoFov2ZOf/yFTgeb3mcu1ElkNA6R3iDZH+WHbOIWw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+    <!-- https://cdnjs.com/libraries/bootswatch -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.3.0/superhero/bootstrap.min.css" integrity="sha512-J0q3uYNPOZ/n9hYguPcu6W6vWeLg1auyzcHnpQ4T/yd57kHb2tCz4MpVBdvoJwWXOUjDWT9t9QdsTiMrS2XRvw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.6.0/font/bootstrap-icons.min.css"
-        integrity="sha512-7w04XesEFaoeeKX0oxkwayDboZB/+AKNF5IUE50fCUDUywLvDN4gv2513TLQS+RDenAeHEK3O40jZZVrkpnWWw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.6.0/font/bootstrap-icons.min.css"
+    integrity="sha512-7w04XesEFaoeeKX0oxkwayDboZB/+AKNF5IUE50fCUDUywLvDN4gv2513TLQS+RDenAeHEK3O40jZZVrkpnWWw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css"
-        integrity="sha512-BnbUDfEUfV0Slx6TunuB042k9tuKe3xrD6q4mg5Ed72LTgzDIcLPxg6yI2gcMFRyomt+yJJxE+zJwNmxki6/RA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    integrity="sha512-BnbUDfEUfV0Slx6TunuB042k9tuKe3xrD6q4mg5Ed72LTgzDIcLPxg6yI2gcMFRyomt+yJJxE+zJwNmxki6/RA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -42,12 +36,4 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script src="/js/app.js"></script>
-</head>
-
-<body ng-app="aboutme">
-    <div class="container-sm" ng-view>
-
-    </div>
-</body>
-
-</html>
+{{end}}

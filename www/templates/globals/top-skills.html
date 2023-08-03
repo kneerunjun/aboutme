@@ -22,22 +22,11 @@ this will spell out the competency the working span of the skills and broad capa
         </div>
         {{ end }}
     {{ end }}
-    <!-- for mobile and handheld devices -->
-    {{ range $key, $val := .}}
-        {{ if (le $key 2)}}
-        <div class="col-10 d-flex d-md-none">
-            <div class="card text-white bg-dark mb-3" style="max-width: 20rem;">
-                <div class="card-header">
-                    <div class="progress"><div class="progress-bar bg-success" role="progressbar" style="width: {{.Level}}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div></div>
-                </div>
-                <div class="card-body" style="min-height: 11rem;">
-                    <h4 class="card-title">{{ .Title }}</h4>
-                    <p class="card-text">{{ .Desc }}</p>
-                    <p class="card-text">{{ .Span }}</p>
-                </div>
-            </div>
+    <!-- since what this displays is only the top 3 skills we make provision for other skills -->
+    <div class="row justify-content-center">
+        <div class="col-md-4 col-sm-10 mt-3 ">
+            <button type="button" class="btn btn-outline-light btn-block">Other skills I have..</button>
         </div>
-        {{ end }}
-    {{ end }}
+    </div>
 </div>
 {{ end }}

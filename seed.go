@@ -76,6 +76,30 @@ type Resume struct {
 	Experience  []Workexp      `json:"experience" bson:"experience"`
 }
 
+// Data model of a blog, the model that is stored in the database
+// When the blog is requested, the data, content is retrieved from the database to be displayed on as html
+type Blog struct {
+	Id string `json:"id" bson:"id"`
+	// cover and title of the blog
+	Cover struct {
+		Img   string   `json:"img" bson:"img"`
+		Title string   `json:"title" bson:"title"`
+		Tags  []string `json:"tags" bson:"tags"`
+	} `json:"cover" bson:"cover"`
+	Preface    string   `json:"preface" bson:"preface"`
+	Intro      string   `json:"intro" bson:"intro"`
+	Body       string   `json:"body" bson:"body"`
+	Conclusion string   `json:"conclusion" bson:"conclusion"`
+	References []string `json:"references" bson:"references"`
+	Mob        struct {
+		Preface    string   `json:"preface" bson:"preface"`
+		Intro      string   `json:"intro" bson:"intro"`
+		Body       string   `json:"body" bson:"body"`
+		Conclusion string   `json:"conclusion" bson:"conclusion"`
+		References []string `json:"references" bson:"references"`
+	} `json:"mob" bson:"mob"`
+}
+
 type DBConfig interface {
 	DbName() string
 	CollOrTable() string

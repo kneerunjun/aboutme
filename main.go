@@ -59,6 +59,19 @@ func ServeIndexHtml(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.html", gin.H{"Title": "About me"})
 }
 
+func renderBlog(c *gin.Context) {
+	blogid, ok := c.Params.Get("blogid")
+	if !ok {
+		log.Error("invalid or empty blog ID")
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	log.WithFields(log.Fields{
+		"blog": blogid,
+	}).Debug("rendering blog")
+	c.HTML(http.StatusOK, "blog.html", gin.H{})
+}
+
 // renderMyProfile : will dispatch the index.html page
 func renderMyProfile(c *gin.Context) {
 	userid, ok := c.Params.Get("userid")
@@ -157,6 +170,7 @@ func main() {
 		})
 	})
 	r.GET("/myprofile/:userid", InsertDBConn, renderMyProfile)
+	r.GET("/blogs/:blogid", InsertDBConn, renderBlog)
 	// r.GET("/views/:name", InsertDBConn, ServeView)
 	log.Fatal(r.Run(":8080"))
 }

@@ -8,13 +8,14 @@ import (
 )
 
 const (
-	SERVER_IP = "mongodb://mongostore:27017"
-	DB_NAME   = "aboutme"
-	COLL_NAME = "resume"
+	SERVER_IP  = "mongodb://mongostore:27017"
+	DB_NAME    = "aboutme"
+	COLL_NAME  = "resume"
+	BLOGS_COLL = "blogs"
 )
 
 var (
-	COLL_NAMES = []string{"resume"} // enlisting all the collection names
+	COLL_NAMES = []string{COLL_NAME, BLOGS_COLL} // enlisting all the collection names
 )
 
 type ProfilePhoto struct {
@@ -76,28 +77,40 @@ type Resume struct {
 	Experience  []Workexp      `json:"experience" bson:"experience"`
 }
 
+// BlogImg : this typically refers to the blog cover image
+// hence we have spread with width but controlled height
+type BlogImg struct {
+	Src string
+	Ht  int
+}
+
+type BlogCover struct {
+	Img   BlogImg  `json:"img" bson:"img"`
+	Title string   `json:"title" bson:"title"`
+	Tags  []string `json:"tags" bson:"tags"`
+}
+
+// same fields as the blog - just that they are abridged
+type MobBlog struct {
+	Preface    string `json:"preface" bson:"preface"`
+	Intro      string `json:"intro" bson:"intro"`
+	Body       string `json:"body" bson:"body"`
+	Conclusion string `json:"conclusion" bson:"conclusion"`
+}
+
 // Data model of a blog, the model that is stored in the database
 // When the blog is requested, the data, content is retrieved from the database to be displayed on as html
 type Blog struct {
+	
 	Id string `json:"id" bson:"id"`
 	// cover and title of the blog
-	Cover struct {
-		Img   string   `json:"img" bson:"img"`
-		Title string   `json:"title" bson:"title"`
-		Tags  []string `json:"tags" bson:"tags"`
-	} `json:"cover" bson:"cover"`
-	Preface    string   `json:"preface" bson:"preface"`
-	Intro      string   `json:"intro" bson:"intro"`
-	Body       string   `json:"body" bson:"body"`
-	Conclusion string   `json:"conclusion" bson:"conclusion"`
-	References []string `json:"references" bson:"references"`
-	Mob        struct {
-		Preface    string   `json:"preface" bson:"preface"`
-		Intro      string   `json:"intro" bson:"intro"`
-		Body       string   `json:"body" bson:"body"`
-		Conclusion string   `json:"conclusion" bson:"conclusion"`
-		References []string `json:"references" bson:"references"`
-	} `json:"mob" bson:"mob"`
+	Cover      BlogCover `json:"cover" bson:"cover"`
+	Preface    string    `json:"preface" bson:"preface"`
+	Intro      string    `json:"intro" bson:"intro"`
+	Body       string    `json:"body" bson:"body"`
+	Conclusion string    `json:"conclusion" bson:"conclusion"`
+	References []string  `json:"references" bson:"references"`
+	Mob        MobBlog   `json:"mob" bson:"mob"`
 }
 
 type DBConfig interface {
@@ -131,6 +144,16 @@ func NewDbConn(cfg DBConfig) (*mgo.Collection, error) {
 	}
 	session.SetMode(mgo.Monotonic, true)
 	return session.DB(cfg.DbName()).C(cfg.CollOrTable()), nil
+}
+func AddBlog(r *Blog) error {
+	coll, err := NewDbConn(&MongoConfig{dbName: DB_NAME, collName: BLOGS_COLL})
+	if err != nil {
+		return fmt.Errorf("failed to connect to database :%s", err)
+	}
+	if coll == nil {
+		return fmt.Errorf("invaild/nil collection, cannot add new blog")
+	}
+	return coll.Insert(r)
 }
 
 // AddResume : adds a new resume to the database

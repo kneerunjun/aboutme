@@ -45,7 +45,17 @@ func init() {
 		"seed": FSeed,
 	}).Debug("now chcking for the seed variable")
 }
-
+func MakeInsertDBConn(collName string) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		coll, err := NewDbConn(&MongoConfig{dbName: DB_NAME, collName: collName})
+		if err != nil {
+			log.Error("failed to connect to database")
+			c.AbortWithStatus(http.StatusBadGateway)
+			return
+		}
+		c.Set("conn", coll)
+	}
+}
 func InsertDBConn(c *gin.Context) {
 	resumeColl, err := NewDbConn(&MongoConfig{dbName: DB_NAME, collName: COLL_NAME})
 	if err != nil {
@@ -69,7 +79,40 @@ func renderBlog(c *gin.Context) {
 	log.WithFields(log.Fields{
 		"blog": blogid,
 	}).Debug("rendering blog")
-	c.HTML(http.StatusOK, "blog.html", gin.H{})
+	val, ok := c.Get("conn")
+	if !ok {
+		log.Error("Cannot server Html, no connection to database")
+		c.AbortWithStatus(http.StatusBadGateway)
+		return
+	}
+	coll, ok := val.(*mgo.Collection)
+	if !ok {
+		log.Error("invalid object for mgo.Collection, check and try again")
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	result := Blog{}
+	err := coll.Find(bson.M{"id": blogid}).One(&result)
+	if err != nil {
+		if errors.Is(err, mgo.ErrNotFound) {
+			log.WithFields(log.Fields{
+				"id": blogid,
+			}).Error("failed to get profile of userid")
+			c.AbortWithStatus(http.StatusBadRequest)
+			return
+		} else {
+			// case when the query has failed - this could be of failed gateway , but would be reported as InternalError
+			log.WithFields(log.Fields{
+				"err": err,
+			}).Error("query to get profile failed")
+			c.AbortWithStatus(http.StatusInternalServerError)
+			return
+		}
+	}
+	log.WithFields(log.Fields{
+		"title": result.Cover.Title,
+	}).Debug("found blog in database")
+	c.HTML(http.StatusOK, "blog.html", result)
 }
 
 // renderMyProfile : will dispatch the index.html page
@@ -145,6 +188,10 @@ func main() {
 		if err := NiranjanAwati(); err != nil {
 			log.WithFields(log.Fields{"err": err}).Error("Error seeding the database")
 		}
+		if err := SampleBlog(); err != nil {
+			log.WithFields(log.Fields{"err": err}).Error("Error seeding the database")
+		}
+
 	}
 	// Loading all environment variables
 	dirStatic := os.Getenv("DIR_STATIC")
@@ -170,7 +217,7 @@ func main() {
 		})
 	})
 	r.GET("/myprofile/:userid", InsertDBConn, renderMyProfile)
-	r.GET("/blogs/:blogid", InsertDBConn, renderBlog)
+	r.GET("/blogs/:blogid", MakeInsertDBConn(BLOGS_COLL), renderBlog)
 	// r.GET("/views/:name", InsertDBConn, ServeView)
 	log.Fatal(r.Run(":8080"))
 }

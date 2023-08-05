@@ -3,12 +3,11 @@
 
 <head>
     {{ template "globals/head.html"}}
-    <title>{{.Title}}</title>
 </head>
 <body>
     {{ template "globals/top-nav.html" }}
     <!-- this is for the desktop /laptop resolutions -->
-    <div class="container mt-5 d-none d-md-flex">
+    <div class="container mt-5 d-none d-md-block">
         {{ template "blogs/cover-img.html" .Cover}}
         {{ template "blogs/preface.html" .Preface}}
         {{ template "blogs/intro.html" .Intro}}
@@ -17,13 +16,13 @@
         {{ template "blogs/refs.html" .References}}
     </div>
     <!-- this is for the mobile resolutions -->
-    <div class="container mt-5 d-flex d-md-none">
+    <div class="container mt-5 d-block d-md-none">
         {{ template "blogs/cover-img.html" .Cover}}
         {{ template "blogs/preface-sm.html" .Mob.Preface}}
         {{ template "blogs/intro-sm.html" .Mob.Intro}}
         {{ template "blogs/body-sm.html" .Mob.Body}}
         {{ template "blogs/concl-sm.html" .Mob.Conclusion}}
-        {{ template "blogs/refs-sm.html" .Mob.References}}
+        {{ template "blogs/refs-sm.html" .References}}
     </div>
 </body>
 </html>

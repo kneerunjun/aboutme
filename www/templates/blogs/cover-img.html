@@ -1,5 +1,11 @@
 {{ define "blogs/cover-img.html" }}
-    <img src="{{.Img.Src}}" class="mr-3 profile-photo" width="100%"
-    height="{{.Img.Ht}}px" alt="blog_cover">
-
+    <div class="text-center">
+        <img src="{{.Img.Src}}" class="mr-3 img-fluid" 
+        height="auto" alt="blog_cover"
+        style="max-width:65%;">
+        <div class="mt-5">
+            {{.Title}}
+            <hr class="hr">
+        </div>
+    </div>
 {{ end }}

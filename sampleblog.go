@@ -11,11 +11,14 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+/*
+TODO: needs to be seen if we can deliver html in place of the text
+*/
 var sampleBlog Blog = Blog{
 	Id: bson.NewObjectId().Hex(),
 	Cover: BlogCover{
-		Img:   BlogImg{Src: "/images/yelopencil.jpg", Ht: 200},
-		Title: "Sample blog",
+		Img:   BlogImg{Src: "/images/telegram.jpg", MaxWd: 65},
+		Title: "<h2>Sample blog</h2>",
 		Tags:  []string{"sample", "telegram", "test"},
 	},
 	Preface:    `Bacon ipsum dolor amet alcatra cow andouille bresaola fatback. Tongue kielbasa pancetta, flank capicola turducken burgdoggen tail cupim. Ground round short ribs chislic andouille rump pork loin shankle brisket filet mignon shank t-bone jerky leberkas. Meatball cupim bacon beef ribs. Capicola kielbasa picanha leberkas, cow meatloaf filet mignon turkey. Strip steak shankle andouille doner jerky.`,

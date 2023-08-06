@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 
+	"html/template"
+
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -80,14 +82,14 @@ type Resume struct {
 // BlogImg : this typically refers to the blog cover image
 // hence we have spread with width but controlled height
 type BlogImg struct {
-	Src string
-	Ht  int
+	Src   string
+	MaxWd int
 }
 
 type BlogCover struct {
-	Img   BlogImg  `json:"img" bson:"img"`
-	Title string   `json:"title" bson:"title"`
-	Tags  []string `json:"tags" bson:"tags"`
+	Img   BlogImg       `json:"img" bson:"img"`
+	Title template.HTML `json:"title" bson:"title"`
+	Tags  []string      `json:"tags" bson:"tags"`
 }
 
 // same fields as the blog - just that they are abridged
@@ -101,7 +103,6 @@ type MobBlog struct {
 // Data model of a blog, the model that is stored in the database
 // When the blog is requested, the data, content is retrieved from the database to be displayed on as html
 type Blog struct {
-	
 	Id string `json:"id" bson:"id"`
 	// cover and title of the blog
 	Cover      BlogCover `json:"cover" bson:"cover"`

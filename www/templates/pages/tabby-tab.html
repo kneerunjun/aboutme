@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{ template "globals/head.html"}}
+</head>
+{{ template "globals/top-nav.html" }}
+<div class="container">
+    {{ template "globals/blog-header.html" .}}
+    <div class="col-12 col-md-10 offset-md-1 bg-dark p-5">
+        <!-- all the blog content goes in here -->
+        <p>
+            What I need is a working tab control. Spare me the the frills and fancies ,just get me a control that works
+            and looks decent. Tabby tab does just that. Plug the code from github <a
+                href="https://github.com/kneerunjun/tabby-tab">Project Tabby-Tab on Github</a>
+        </p>
+        <p>
+            How many times have you wrestled with the tab control from bootstrap ? While bootstrap is a convenience we
+            all appreciate, tab-controls and drop downs are a bit of odd-ball. Fooling around with the ‘hrefs’ has not
+            got any good. Too many moving parts , and messy HTML code. Does a simple tab control really need all this
+            html markup to get a control that shifts between the clicks ?
+        </p>
+        <div class="container d-flex justify-content-center">
+            <img src="/images/tabby-1.jpg" width="50%" height="auto" alt="" class="img-responsive">
+        </div>
+        <p>
+            Above is a code excerpt from bootstrap for the tab-control. If you still like to get all that code for
+            creating the buttons, I guess then you don’t need my control at all. If not then you are here at the right
+            place. For me , it is just too much of html just to get going with the tab. And moreover the content is
+            still not in place.
+        </p>
+        <div class="container text-center">
+            <blockquote class="blockquote">
+                <p class="mb-0 text-light">Can there be a control where the developer just puts up a content in
+                <div> and the control does everything behind the scenes ? Number of tab-buttons are then just the number
+                    of <div> s the user has put up!</p>
+            </blockquote>
+        </div>
+        <p>
+            Here is what in contrast Tabby would need you to do to get the simple tab-control working. Refer to the
+            Tabby Git Wiki page and let me know if this really works for you ? This is freebie and source is open on
+            Github, get it down , suggest me changes , or you can even raise bugs / enhancements.
+        </p>
+        <div class="container d-flex justify-content-center">
+            <img src="/images/tabby-2.jpg" width="50%" height="auto" alt="" class="img-responsive">
+        </div>
+    </div>
+    {{ template "globals/blog-refs.html" .}}
+</div>
+
+</html>

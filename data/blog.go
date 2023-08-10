@@ -70,6 +70,22 @@ var (
 			AboutAuthor: "Niranjan is an IoT junkie & GoLang developer",
 			AuthorEmail: "kneerunjun@gmail.com",
 		},
+		{
+			CoverImg: "/images/angularjs.png",
+			Slug:     "",
+			Title:    "Tabby Tab Angular tab-control in a jiffy!",
+			Tags: []string{
+				"webdev", "angularjs", "re-usecontrols", "frontend", "javascript",
+			},
+			References: []map[string]string{
+				{"text": "Source code on GitHub", "link": "https://github.com/kneerunjun/tabby-tab"},
+			},
+			PubDate:     "25-SEP-2015",
+			PubLoc:      "Pune, India",
+			AuthorName:  "Niranjan Awati",
+			AboutAuthor: "Niranjan is an IoT junkie & GoLang developer",
+			AuthorEmail: "kneerunjun@gmail.com",
+		},
 	}
 )
 

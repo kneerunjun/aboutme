@@ -1,0 +1,17 @@
+{{ define "globals/blog-refs.html" }}
+    <div class="container col-12 col-md-10 offset-md-1 d-flex justify-content-end mt-5">
+       <h6> <a href="mailto:{{.AuthorEmail}}">-- {{.AuthorName}}</a></h6>
+    </div>
+    <div class="container col-12 col-md-10 offset-md-1 d-flex justify-content-end">
+       <small><p class="text-muted">{{.AboutAuthor}}</p></small>
+    </div>
+    <div class="container col-12 col-md-10 offset-md-1">
+            <hr class="hr">
+            <h4>References</h4>
+            <ol>
+                {{ range $key, $val := .References}}
+                    <li><a href="{{$val.link}}">{{$val.text}}</a></li>
+                {{ end }}
+            </ol>
+    </div>
+{{ end }}

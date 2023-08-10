@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/kneerunjun/aboutme/data"
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
@@ -47,7 +48,7 @@ func init() {
 }
 func MakeInsertDBConn(collName string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		coll, err := NewDbConn(&MongoConfig{dbName: DB_NAME, collName: collName})
+		coll, err := data.NewDbConn(&data.MongoConfig{DBName: data.DB_NAME, CollName: collName})
 		if err != nil {
 			log.Error("failed to connect to database")
 			c.AbortWithStatus(http.StatusBadGateway)
@@ -57,7 +58,7 @@ func MakeInsertDBConn(collName string) gin.HandlerFunc {
 	}
 }
 func InsertDBConn(c *gin.Context) {
-	resumeColl, err := NewDbConn(&MongoConfig{dbName: DB_NAME, collName: COLL_NAME})
+	resumeColl, err := data.NewDbConn(&data.MongoConfig{DBName: data.DB_NAME, CollName: data.COLL_NAME})
 	if err != nil {
 		log.Error("failed to connect to database")
 		c.AbortWithStatus(http.StatusBadGateway)
@@ -69,6 +70,10 @@ func ServeIndexHtml(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.html", gin.H{"Title": "About me"})
 }
 
+// renderBlog : handler when the client requests a blog of the single id
+// since we ARENT designing a single page application, here each blog would have its individual page.
+// each page for the blog would have some elements that are part of the template and majority of the content that is specific to the blog
+// cover image, title, references, can be tempalated but the body of the blog remains specific
 func renderBlog(c *gin.Context) {
 	blogid, ok := c.Params.Get("blogid")
 	if !ok {
@@ -91,13 +96,13 @@ func renderBlog(c *gin.Context) {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
-	result := Blog{}
-	err := coll.Find(bson.M{"id": blogid}).One(&result)
+	result := data.Blog{}
+	err := coll.Find(bson.M{"slug": blogid}).One(&result)
 	if err != nil {
 		if errors.Is(err, mgo.ErrNotFound) {
 			log.WithFields(log.Fields{
 				"id": blogid,
-			}).Error("failed to get profile of userid")
+			}).Error("failed to get blog of slug")
 			c.AbortWithStatus(http.StatusBadRequest)
 			return
 		} else {
@@ -110,9 +115,9 @@ func renderBlog(c *gin.Context) {
 		}
 	}
 	log.WithFields(log.Fields{
-		"title": result.Cover.Title,
+		"title": result.Title,
 	}).Debug("found blog in database")
-	c.HTML(http.StatusOK, "blog.html", result)
+	c.HTML(http.StatusOK, fmt.Sprintf("%s.html", result.Slug), result)
 }
 
 // renderMyProfile : will dispatch the index.html page
@@ -135,7 +140,7 @@ func renderMyProfile(c *gin.Context) {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
-	result := Resume{}
+	result := data.Resume{}
 	err := coll.Find(bson.M{"id": userid}).One(&result)
 	if err != nil {
 		if errors.Is(err, mgo.ErrNotFound) {
@@ -184,14 +189,11 @@ func main() {
 	}
 	if FSeed {
 		log.Warn("Seed flag set to true, flushing the data. This will be replaced with seed data..")
-		FlushDB()
-		if err := NiranjanAwati(); err != nil {
+		data.FlushDB()
+		if err := data.NiranjanAwati(); err != nil {
 			log.WithFields(log.Fields{"err": err}).Error("Error seeding the database")
 		}
-		if err := SampleBlog(); err != nil {
-			log.WithFields(log.Fields{"err": err}).Error("Error seeding the database")
-		}
-
+		data.SeedBlogs()
 	}
 	// Loading all environment variables
 	dirStatic := os.Getenv("DIR_STATIC")
@@ -217,7 +219,7 @@ func main() {
 		})
 	})
 	r.GET("/myprofile/:userid", InsertDBConn, renderMyProfile)
-	r.GET("/blogs/:blogid", MakeInsertDBConn(BLOGS_COLL), renderBlog)
+	r.GET("/blogs/:blogid", MakeInsertDBConn(data.BLOGS_COLL), renderBlog)
 	// r.GET("/views/:name", InsertDBConn, ServeView)
 	log.Fatal(r.Run(":8080"))
 }

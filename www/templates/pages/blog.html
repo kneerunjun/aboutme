@@ -15,11 +15,13 @@
     <!-- this is for the desktop /laptop resolutions -->
     <div class="container mt-5 d-none d-md-block">
         {{ template "blogs/cover-img.html" .Cover}}
-        {{ template "blogs/preface.html" .Preface}}
-        {{ template "blogs/intro.html" .Intro}}
-        {{ template "blogs/body.html" .Body}}
-        {{ template "blogs/concl.html" .Conclusion}}
-        {{ template "blogs/refs.html" .References}}
+       <div class="col-md-10 offset-md-1">
+            {{ template "blogs/preface.html" .Preface}}
+            {{ template "blogs/intro.html" .Intro}}
+            {{ template "blogs/body.html" .Body}}
+            {{ template "blogs/concl.html" .Conclusion}}
+            {{ template "blogs/refs.html" .References}}
+       </div>
     </div>
     <!-- this is for the mobile resolutions -->
     <div class="container mt-5 d-block d-md-none">

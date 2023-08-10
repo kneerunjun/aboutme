@@ -1,24 +1,6 @@
-package main
+package data
 
-import (
-	"fmt"
-
-	"html/template"
-
-	mgo "gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
-)
-
-const (
-	SERVER_IP  = "mongodb://mongostore:27017"
-	DB_NAME    = "aboutme"
-	COLL_NAME  = "resume"
-	BLOGS_COLL = "blogs"
-)
-
-var (
-	COLL_NAMES = []string{COLL_NAME, BLOGS_COLL} // enlisting all the collection names
-)
+import "fmt"
 
 type ProfilePhoto struct {
 	Location string // web location of the photo that appears on the front page splash
@@ -79,96 +61,6 @@ type Resume struct {
 	Experience  []Workexp      `json:"experience" bson:"experience"`
 }
 
-// BlogImg : this typically refers to the blog cover image
-// hence we have spread with width but controlled height
-type BlogImg struct {
-	Src   string
-	MaxWd int
-}
-
-type BlogCover struct {
-	Img   BlogImg       `json:"img" bson:"img"`
-	Title template.HTML `json:"title" bson:"title"`
-	Tags  []string      `json:"tags" bson:"tags"`
-}
-
-// same fields as the blog - just that they are abridged
-type MobBlog struct {
-	Preface    string `json:"preface" bson:"preface"`
-	Intro      string `json:"intro" bson:"intro"`
-	Body       string `json:"body" bson:"body"`
-	Conclusion string `json:"conclusion" bson:"conclusion"`
-}
-
-// Data model of a blog, the model that is stored in the database
-// When the blog is requested, the data, content is retrieved from the database to be displayed on as html
-type Blog struct {
-	Id string `json:"id" bson:"id"`
-	// cover and title of the blog
-	Cover      BlogCover `json:"cover" bson:"cover"`
-	Preface    string    `json:"preface" bson:"preface"`
-	Intro      string    `json:"intro" bson:"intro"`
-	Body       string    `json:"body" bson:"body"`
-	Conclusion string    `json:"conclusion" bson:"conclusion"`
-	References []string  `json:"references" bson:"references"`
-	Mob        MobBlog   `json:"mob" bson:"mob"`
-}
-
-type DBConfig interface {
-	DbName() string
-	CollOrTable() string
-}
-
-type MongoConfig struct {
-	dbName   string
-	collName string
-}
-
-func (mcfg *MongoConfig) DbName() string {
-	return mcfg.dbName
-}
-
-func (mcfg *MongoConfig) CollOrTable() string {
-	return mcfg.collName
-}
-
-// NewDbConn : helps to instantiate a new connection and ping the db server upon successful connection
-// will take in the configuration of the datbase as an interface
-// will send back a session, or connection object after having to set the mode of the connection
-func NewDbConn(cfg DBConfig) (*mgo.Collection, error) {
-	session, err := mgo.Dial(SERVER_IP)
-	if err != nil {
-		return nil, err
-	}
-	if session == nil {
-		return nil, fmt.Errorf("nil session, cannot cotinue")
-	}
-	session.SetMode(mgo.Monotonic, true)
-	return session.DB(cfg.DbName()).C(cfg.CollOrTable()), nil
-}
-func AddBlog(r *Blog) error {
-	coll, err := NewDbConn(&MongoConfig{dbName: DB_NAME, collName: BLOGS_COLL})
-	if err != nil {
-		return fmt.Errorf("failed to connect to database :%s", err)
-	}
-	if coll == nil {
-		return fmt.Errorf("invaild/nil collection, cannot add new blog")
-	}
-	return coll.Insert(r)
-}
-
-// AddResume : adds a new resume to the database
-func AddResume(r *Resume) error {
-	coll, err := NewDbConn(&MongoConfig{dbName: DB_NAME, collName: COLL_NAME})
-	if err != nil {
-		return fmt.Errorf("failed to connect to database :%s", err)
-	}
-	if coll == nil {
-		return fmt.Errorf("invaild/nil collection, cannot add resume")
-	}
-	return coll.Insert(r)
-}
-
 // NiranjanAwati : seeds niranjan's reume to the database
 func NiranjanAwati() error {
 	res := &Resume{
@@ -223,20 +115,6 @@ func NiranjanAwati() error {
 	}
 	if err := AddResume(res); err != nil {
 		return fmt.Errorf("failed to add resume to the database: %s", err)
-	}
-	return nil
-}
-
-func FlushDB() error {
-	session, err := mgo.Dial(SERVER_IP)
-	if err != nil {
-		return err
-	}
-	if session == nil {
-		return fmt.Errorf("nil session, cannot cotinue")
-	}
-	for _, name := range COLL_NAMES {
-		session.DB(DB_NAME).C(name).RemoveAll(bson.M{})
 	}
 	return nil
 }

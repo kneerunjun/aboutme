@@ -16,3 +16,16 @@ func TestMgoConnection(t *testing.T) {
 	assert.NotNil(t, coll, "nil collection, unexpected")
 
 }
+
+func TestSlugify(t *testing.T) {
+	samples := []string{
+		"Sample blog",
+		"saMPle",
+		"Sample Test Blog",
+	}
+	for _, v := range samples {
+		result, err := SlugifyTitle(v)
+		assert.Nil(t, err, "Unexpected error when sugifying")
+		t.Log(result)
+	}
+}

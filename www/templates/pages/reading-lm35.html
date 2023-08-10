@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{ template "globals/head.html"}}
+</head>
+{{ template "globals/top-nav.html" }}
+<div class="container">
+    {{ template "globals/blog-header.html" .}}
+    <div class="col-12 col-md-10 offset-md-1">
+        <p>
+            Inarguably Raspberry Pi has single-handedly brought sci-fi dreams to an ordinary engineer’s desk. If they can send satellites to space using RPi (Astro Pi)<sup>[4]</sup> then your home automation is cutting butter with hot butcher-knife. RPi simply is over qualified for the job, least to say..  
+        </p>
+        <div class="container justify-content-center">
+            <blockquote class="blockquote">
+                <p class="mb-0 text-light">Don’t be deceived by the looks , that is a dynamite of a computing device. Once you own it you become an instant fan of this piece of hardware</p>
+            </blockquote>
+        </div>
+        <p>
+            Back on the ground, though there must have been a reason why they  have provided 26 digital GPIO (General purpose input output) pins on it and none for analog measurement. It would be naive to dismiss this as a shortcoming and insipidly use RPi only for blinking some LEDs. Often makers with limited budget would build RC timer<sup>[3]</sup> with discrete components at hand, before moving onto MPC3008 or even better a 16 bit ADC channel. 
+            <br> <br>
+            I had a prejudice towards available ICs and always thought of getting the job done earlier rather than having to build  RC timer <sup>[3]</sup> all by myself. But believe me there is no fun in letting the IC do that job for you. All you need is a resistor,capacitor, multimeter and you are all set for the circus.
+            <br> I’m in no way downplaying the role of ICs; what a MPC3008 can do certainly is exclusive. As a tinkerer (if you may call me that ) I just loved fooling around with the “bare basic” components, building my own logic. Armed with only a multi-meter and hand-rolled python code. 
+            <br> <br>
+            I realized pure happiness in this world is free , well almost 
+        </p>
+        <h5 class="text-primary">“LM35” what about it?</h5>
+        <hr class="hr">
+        <p>
+            Is a humble resistive temperature sensor sending out meek voltage-signals corresponding to temperature in
+            the
+            surrounding. It has a 10mV/oC gain, for simpletons- room temp (25oC) it should send a signal of 250mV and
+            that’s how
+            your system knows how warm is it.</p>
+        <h5 class="text-primary">But then was LM35 really built for RPi?</h5>
+        <hr class="hr">
+        <p>
+            RPi is from another generation.The lowest HIGH signal for any of the GPIO pins is 1.34V and from numerous
+            documentation we have- that all the pins are 3.3V tolerant pins on the upper side with no pin supplying
+            /sinking
+            more than 16mA <a
+                href="https://raspberrypi.stackexchange.com/questions/9298/what-is-the-maximum-current-the-gpio-pins-can-output"
+                target="_blank">(rpistackexchange)</a>
+            Well , that means LM35 can keep sending signals to RPi , and RPi pays no heed. So even if you were to charge
+            the
+            capacitor with that LM35 voltage signal, RPi cannot read that.</p>
+        <h5 class="text-primary">IL358N to the rescue:</h5>
+        <hr class="hr">
+        <p>
+            Op-Amps are those handy components that can step up the signal voltage against a preset amplification
+            factor. If we
+            can direct the signal from charged capacitor before it feeds the RPi GPIO we can actually measure the
+            voltage from
+            LM35
+        </p>
+        <h5 class="text-primary">With amplification comes limited range :</h5>
+        <hr class="hr">
+        <p>
+            Op-Amps by theory can step up the voltage to any ceiling.<sup>[2]</sup>  If one wants to save your RPi from giving out that
+            “magic smoke” one better not allow any more than 3.1V as the HIGH signal. So while you can amplify the signal you
+            cannot expect RPi to work at all the levels.
+        </p>
+        <p>Just to put things in tabular perspective..</p>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Temp (oC)</th>
+                    <th scope="col">From LM35 (Volts)</th>
+                    <th scope="col">Op-Amp Amplification</th>
+                    <th scope="col">RPi GPIO-IN (Volts)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-active">
+                    <th scope="row">25</th>
+                    <td>0.250</td>
+                    <td>5.36</td>
+                    <td>1.34</td>
+                </tr>
+                <tr class="table-active">
+                    <th scope="row">30</th>
+                    <td>0.30</td>
+                    <td>5.36</td>
+                    <td>1.6</td>
+                </tr>
+                <tr class="table-active">
+                    <th scope="row">61.5</th>
+                    <td>0.61</td>
+                    <td>5.36</td>
+                    <td>3.3</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>
+            You can notice how I can now deal with any voltage between 25oC and 61.5oC with good amount of accuracy but
+            any less than the “floor” would be unnoticed and any greater than “ceiling” is dangerous for RPi
+        </p>
+        <p>
+            The circuit I used:
+        </p>
+        <img width="100%" height="auto" class="img-responsive" src="/images/rctimer-hand.jpg" alt="RC timer hand drawn circuit diagram">
+    </div>
+    {{ template "globals/blog-refs.html" .}}
+</div>
+
+</html>

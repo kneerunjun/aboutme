@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{ template "globals/head.html"}}
+</head>
+{{ template "globals/top-nav.html" }}
+<div class="container">
+    {{ template "globals/blog-header.html" .}}
+    <div class="col-12 col-md-10 offset-md-1 bg-dark p-5">
+        <!-- all the blog content goes in here -->
+        <p>
+            <strong>Transclusion</strong> no doubt has been and continues to be a shaky ground for beginners in AngularJS. There is an awful lot of things that are evidently uncomfortable for people who take up to wrestle with directive concepts. Magic parameters, high-worded documentation makes one wonder if such complex topics are practically worthy of your attention at all when you take up this topic for the maiden time.
+        </p>
+        <div class="container text-center">
+            <blockquote class="blockquote">
+                <p>The  moment the spell check puts up a wiggly line underneath the word ‘transclusion’ you get the hint of “unusual” things to come.</p>
+            </blockquote>
+        </div>
+        <h5 class="text-primary">Isolated scope transclusion – inheritance is complex</h5>
+        <hr class="hr">
+        <p>
+            Fathoming scope life cycle management hinges on how well you grasp what scopes are, more precisely how the scope dual-derivation works
+        </p>
+        <ol>
+            <li>Prototype inheritance : data access</li>
+            <li>$parent inheritance : life cycle maintenance access</li>
+        </ol>
+        <p>
+            Scopes need to get their data in the context, widening the context is relaxing the scope restrictions <strong>(isolated -> true -> false )</strong>. Its how the scope sees the surrounding scopes and can it really interact with the vicinity scopes.
+        </p>
+        <p>
+            Life cycle though is take care by $parent relations. When the superior (placed higher in the HTML DOM hierarchy) directive is destroyed it would then trigger destruction of leaf scope nodes. $parent is the property that takes you from the leaf to the root.
+        </p>
+        <p>Here is a Plnk that illustrates perhaps better of what I want to bring out <a href="https://plnkr.co/edit/t1PEAT?p=info&preview">Plkr</a></p>
+        <h5 class="text-primary">Tab control with transcluding tab leaf</h5>
+        <hr class="hr">
+        <div class="container d-flex justify-content-center">
+            <img src="/images/transclusion-1.jpg" width="70%" height="auto" alt="" class="img-responsive">
+        </div>
+        <p>Lets demonstrate the concept building up a tabbed page like control – Tab Control</p>
+        <p>
+            Tab controls are relatively simple controls that have nav pills showing relevant data / content on the click of the button. Grouped data or actions often demand group deserving a leaf in the tab that can be opened at will without any specific sequence.
+        </p>
+        <p>
+            Well, making a simple tab control should not be a big deal if you are content with the way ngShow and ngHide works. With limited number of tab leafs complacency could be all ok. Infact it is just no concern for the user whether you are hiding the content or dropping it from the DOM. Browsers really do not yield even with considerable number of leafs.
+        </p>
+        <p><strong>
+            Here we are dealing with the case where the tab control would like to recycle the contents of any leaf when the tab is deactivated, not only hide it from the DOM.
+        </strong></p>
+        <h5 class="text-primary">Not all that transcludes is a part of the template always:</h5>
+        <hr class="hr">
+        <div class="container d-flex justify-content-center">
+            <img src="/images/transclusion-1.jpg" width="80%" height="auto" alt="" class="img-responsive">
+        </div>
+        <div class="container text-center">
+            <blockquote class="blockquote">
+                <p>
+                    At the core transclusion is just having some directive’s template content specified dynamically. Consequently there are 2 moving parts here
+                </p>
+            </blockquote>
+        </div>
+        <ul>
+            <li>How to identify what is the content that needs to be inducted in the template (transcluded content)</li>
+            <li>Upon identification where does it really need to fit ?</li>
+        </ul>
+        <p>
+            If you are just taking all the content in the manifestation of the directive and dumping it in the ng-transclude then ideally you are doing it right but still not having some mischief with the system . Where is the fun in doing what the system can really do in most of the cases ?
+        </p>
+        <p>
+            It becomes evident why we have picked up the Tab control use case. Tab leafs don’t all go into the content area all at once. Its only when the user clicks on the tab leaf it would have to get the content in. Now here is the catch : The content we have been talking all this while is not live content ! – it has to be compiled in scope and then injected!
+        </p>
+        <div class="container text-center">
+            <blockquote class="blockquote">
+                <p>
+                    When you have the dynamic content transclusion itself based on condition and not all as a lump, you are basically trying to simulate an ngTransclude with ngIf  inside. Conditional transclusion becomes very interesting since then you are swimming very deep at the bottom of the trench.
+                </p>
+            </blockquote>
+        </div>
+        <h5 class="text-primary">Transclude :true</h5>
+        <hr class="hr">
+        <p>
+            When you are achieving this level of custom behavior that even the transcluding content is conditional , it is foremost best to embrace the fact that this is extra-ordinary. Such cases call for an responsibility on the programmer to handle things cleanly for AngularJS. Angular is no longer in control of things here. Recycling  the tab-leaf and putting in the new one happens all on your lead.
+        </p>
+        <div class="container d-flex justify-content-center">
+            <img src="/images/tclusionfunction.jpg" width="75%" height="auto" alt="" class="img-responsive">
+        </div>
+        <div class="container d-flex justify-content-center text-center mb-2">
+            <figcaption class="text-muted"><small>
+                <i>The tab-leaf link function helps formulate each of the tab-leaf object. It keeps the reference for the content and transcluding scope</i>
+            </small></figcaption>
+        </div>
+        <p>
+            When the leaf comes in anew, you would have to make provision and let angular know you are going to compile in the html content in the contextual transcluding scope. Once done the content then can be simple injected using plain vanilla JQuery. All what you now need is getting hold of the transcluding scope and the content.
+        </p>
+        <p>
+            Quite analogical , once the leaf is ready to be recycled , just removing the content is a bad idea. The transcluding scope needs to be destroyed else you end up leaking scopes.
+        </p>
+        <div class="container d-flex justify-content-center">
+            <img src="/images/tabcontrollink.jpg" width="60%" height="auto" alt="" class="img-responsive">
+        </div>
+        <div class="container d-flex justify-content-center text-center mb-2">
+            <figcaption class="text-muted"><small>
+                <i>link function of the tab-control would then be much cleaner, just asking the tab leaf objects to activate / deactivate</i>
+            </small></figcaption>
+        </div>
+        <p>Angular directives that have transclude: true, provide tclusion function to the link as a parameter. This is how you can get all what you need to as a tab leaf. <a href="https://plnkr.co/edit/ccufBmGS12D0ERLN1jNR?preview"> Please see illustrative details on plunkr</a></p>
+        <h5 class="text-primary">Transclude :”element”</h5>
+        <hr class="hr">
+        <p>
+            This helps getting the transclusion done at a level; higher than what was previously done. Now that means the entire element is transcluded.(Think of tab–leaf to be element transcluded) The tab-control would not have any element transcluded to start off with but just the comments.
+        </p>
+        <p>
+            How does that help ? Well,  when transclusion was “true” the contents were positively compiled into the context, all the tab-leafs , tabs that were not be in place at the start were still compiled. The initial step would be to recycle the tab leafs except the active one.
+        </p>
+        <p>Give transclude :”element” a chance too ! – it may prove to be much more convenient and clean.</p>
+        <p>Not sure , but someday I hope to say “I know Angular quite well…”, but till then everything is a discovery with delight.</p>
+    </div>
+    {{ template "globals/blog-refs.html" .}}
+</div>
+
+</html>

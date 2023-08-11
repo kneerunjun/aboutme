@@ -86,6 +86,22 @@ var (
 			AboutAuthor: "Niranjan is an IoT junkie & GoLang developer",
 			AuthorEmail: "kneerunjun@gmail.com",
 		},
+		{
+			CoverImg: "/images/angularphoto.jpg",
+			Slug:     "",
+			Title:    "Angular directive with conditional transclusion & discrete compile",
+			Tags: []string{
+				"webdev", "angularjs", "re-usecontrols", "frontend", "javascript",
+			},
+			References: []map[string]string{
+				{"text": "Source code on GitHub", "link": "https://github.com/kneerunjun/tabby-tab"},
+			},
+			PubDate:     "14-FEB-2016",
+			PubLoc:      "Pune, India",
+			AuthorName:  "Niranjan Awati",
+			AboutAuthor: "Niranjan is an IoT junkie & GoLang developer",
+			AuthorEmail: "kneerunjun@gmail.com",
+		},
 	}
 )
 

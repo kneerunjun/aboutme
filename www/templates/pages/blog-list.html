@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{ template "globals/head.html"}}
+</head>
+{{ template "globals/top-nav.html" }}
+<div class="container mt-5">
+    <div class="d-flex justify-content-center">
+        <ul class="list-group">
+            {{ range $key, $val := .}}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="/blogs/{{$val.Slug}}">{{ $val.Title }}</a>
+                    <img width="100px" height="auto" src="{{ $val.CoverImg }}" 
+                    alt="preview cover image of the blog" class="img-thumbnail">
+                </li>
+            {{ end }}
+        </ul>
+    </div>
+</div>
+</html>

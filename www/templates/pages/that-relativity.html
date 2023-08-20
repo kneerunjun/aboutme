@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{ template "globals/head.html"}}
+</head>
+{{ template "globals/top-nav.html" }}
+<div class="container">
+    {{ template "globals/blog-header.html" .}}
+    <div class="col-12 col-md-10 offset-md-1 bg-dark p-5">
+        <h5 class="text-primary">Broadcasting , nice but some caution required</h5>
+        <p>
+            Broadcasting is a nice way of getting your messages percolate downward to all the directives underneath.
+            With the limited ways that directives communicate to each other this is the convenient option, closely
+            resembling the event system. You can ridicule calling it dependent on the string names , but then for now ,
+            that is still better than to have services carry your messages around. Broadcasting though you have to
+            realize is an asynchronous task. With no message receipt you are left groping in the dark anticipating that
+            the broadcasts are done doing what they are supposed to.
+        </p>
+        <div class="container text-center">
+            <hr class="hr" width="30%" style="margin-left: 30%;">
+            <blockquote class="blockquote">
+                <p class="text-center">
+                    Broadcasts, one should realize are asynchronous tasks. Its like Mars rover confirming back to
+                    earthlings of its safe landing, but the ones here on earth who it intended to communicate to , are
+                    no longer alive!
+                </p>
+            </blockquote>
+            <hr class="hr" width="30%" style="margin-left: 30%;">
+        </div>
+        <p>
+            It came as a demeaning realization to me recently, knowing angular for quite sometime now, I admit I
+            casually used it as one would in a synchronous scenario. Next I know I was struggling to digest the fact
+            that angular can really dishonor data bindings ! Kneejerk reaction is to check for all variables names and
+            the scope declarations, but once that is done you are just helpless, grappling for answers on either
+            stackoverflow , or angularjs.org. When nothing seems to add up you might as well consider checking for any
+            asynchronous operations you might have abused.
+        </p>
+        <h5 class="text-primary">Asynchrony is alien to us</h5>
+        <p>Here is what I was trying to get done: While the parent directive was able to broadcast all the required
+            messages to the child directives, the receipt of those broadcasts was in a distinct “space-time” zone. That
+            is where i realized the relativity of broadcasting messaging. We were always baffled by black holes and
+            space -time fabric ruptures. More we deny these the more we spot them.
+        </p>
+        <div class="container d-flex justify-content-center mb-3">
+            <img src="/images/broadcastrelativity.jpg" width="60%" height="auto" alt="" class="img-responsive">
+        </div>
+        <p>
+            Then a few hours after putting console.log ( ) all over I finally discovered $boradcast is the one that goes
+            through the worm hole into a distinct dimension. To enable to hear what $broadcast has done we have to delay
+            the the execution of the code block shown above by some intuitive time.
+        </p>
+        <div class="container text-center">
+            <hr class="hr" width="30%" style="margin-left: 30%;">
+            <blockquote class="blockquote">
+                <p class="text-center">
+                    $boradcast goes through a wormhole and the implementation is on the other end of space-time dimension. Earlier you realize this better it is. Solution is just a thought away but to accept the fact that they have time delay is a bit twisted.
+                </p>
+            </blockquote>
+            <hr class="hr" width="30%" style="margin-left: 30%;">
+        </div>
+        <h5 class="text-primary">E=mc<sup>2</sup>!</h5>
+        <p>
+            Clueless code block needed a small delay ! The wormhole was a gateway to the past and the parent directive should have been waiting for all those child directives to finish running the event implementations !
+        </p>
+        <div class="container d-flex justify-content-center mb-3">
+            <img src="/images/timeoutboradcast.jpg" width="60%" height="auto" alt="" class="img-responsive">
+        </div>
+        <p>If you are willing to let go your inertia and dig into the code – here it is <a href="https://gist.github.com/kneerunjun/7d95d3c1db15c1e62352">Github Gist</a> </p>
+    </div>
+    {{ template "globals/blog-refs.html" .}}
+</div>
+
+</html>

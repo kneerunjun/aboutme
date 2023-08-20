@@ -1,5 +1,13 @@
 package main
 
+/* ================
+Project 	: aboutme, Aug2023
+Link		: https://github.com/kneerunjun/aboutme
+Author		: kneerunjun@gmail.com
+Copyright	: Eensymachines
+Desc		: Website hosted on docker to publish a public face, host blog,
+and all about niranjan awati as a profile. Also stores the latest resume. This can be one stop that HR/ recruiters can download details from
+================ */
 import (
 	"errors"
 	"flag"
@@ -20,6 +28,17 @@ var (
 	// IMP: setting this to true would mean all the recent changes to the dtabase are lost and overriden with seed data from within the code
 )
 
+/*
+================
+- from the env gets a configuration flags
+- sets the global variables
+- logging configuration
+  - direction of logs
+  - verbosity of logs
+  - file configuration of logs if it needs to be ilogged to files and not to console
+
+================
+*/
 func init() {
 	if val := os.Getenv("LOG_VERBOSITY"); val == "y" {
 		FVerbose = true
@@ -46,6 +65,12 @@ func init() {
 		"seed": FSeed,
 	}).Debug("now chcking for the seed variable")
 }
+
+/*================
+MakeInsertDBConn:  Will insert DB connection object
+incase of failed connection will revert with 502 gateway failed
+================*/
+
 func MakeInsertDBConn(collName string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		coll, err := data.NewDbConn(&data.MongoConfig{DBName: data.DB_NAME, CollName: collName})
@@ -57,6 +82,13 @@ func MakeInsertDBConn(collName string) gin.HandlerFunc {
 		c.Set("conn", coll)
 	}
 }
+
+/*
+================
+Middleware that helps insert the db connection to the chain of handlers.
+this is deprecated since we have MakeInsertDBConn which can give customizable collection object from the name
+================
+*/
 func InsertDBConn(c *gin.Context) {
 	resumeColl, err := data.NewDbConn(&data.MongoConfig{DBName: data.DB_NAME, CollName: data.COLL_NAME})
 	if err != nil {
@@ -68,6 +100,30 @@ func InsertDBConn(c *gin.Context) {
 }
 func ServeIndexHtml(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.html", gin.H{"Title": "About me"})
+}
+
+// renderBlogList : this sends out a list of all the blogs chrnologically
+// from there on the link to the actual blog
+func renderBlogList(c *gin.Context) {
+	val, ok := c.Get("conn")
+	if !ok {
+		log.Error("Cannot server Html, no connection to database")
+		c.AbortWithStatus(http.StatusBadGateway)
+		return
+	}
+	coll, ok := val.(*mgo.Collection) // blogs collection
+	if !ok {
+		log.Error("invalid object for mgo.Collection, check and try again")
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	result := []data.Blog{}          // result list of all the blogs
+	coll.Find(bson.M{}).All(&result) // getting the list of all the blogs
+
+	log.WithFields(log.Fields{
+		"count_blogs": len(result),
+	}).Debug("requested for the list of all the blogs")
+	c.HTML(http.StatusOK, "blog-list.html", result)
 }
 
 // renderBlog : handler when the client requests a blog of the single id
@@ -219,6 +275,7 @@ func main() {
 		})
 	})
 	r.GET("/myprofile/:userid", InsertDBConn, renderMyProfile)
+	r.GET("/blogs/", MakeInsertDBConn("blogs"), renderBlogList)
 	r.GET("/blogs/:blogid", MakeInsertDBConn(data.BLOGS_COLL), renderBlog)
 	// r.GET("/views/:name", InsertDBConn, ServeView)
 	log.Fatal(r.Run(":8080"))

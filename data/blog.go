@@ -102,6 +102,22 @@ var (
 			AboutAuthor: "Niranjan is an IoT junkie & GoLang developer",
 			AuthorEmail: "kneerunjun@gmail.com",
 		},
+		{
+			CoverImg: "/images/angularrelativity.png",
+			Slug:     "",
+			Title:    "That relativity of angular broadcasts",
+			Tags: []string{
+				"webdev", "angularjs", "re-usecontrols", "frontend", "javascript",
+			},
+			References: []map[string]string{
+				{"text": "GithubGist", "link": "https://gist.github.com/kneerunjun/7d95d3c1db15c1e62352"},
+			},
+			PubDate:     "07-NOV-2015",
+			PubLoc:      "Pune, India",
+			AuthorName:  "Niranjan Awati",
+			AboutAuthor: "Niranjan is an IoT junkie & GoLang developer",
+			AuthorEmail: "kneerunjun@gmail.com",
+		},
 	}
 )
 

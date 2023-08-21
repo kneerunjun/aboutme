@@ -134,6 +134,38 @@ var (
 			AboutAuthor: "Niranjan is an IoT junkie & GoLang developer",
 			AuthorEmail: "kneerunjun@gmail.com",
 		},
+		{
+			CoverImg: "images/helppage.jpg",
+			Slug:     "",
+			Title:    "Help page ecosystem for your angular SPAs",
+			Tags: []string{
+				"angularjs", "webdev",
+			},
+			References: []map[string]string{
+				{"text": "Single Page Applications, MDN glossary", "link": "https://developer.mozilla.org/en-US/docs/Glossary/SPA"},
+			},
+			PubDate:     "04-MAR-2017",
+			PubLoc:      "Pune, India",
+			AuthorName:  "Niranjan Awati",
+			AboutAuthor: "Niranjan is an IoT junkie & GoLang developer",
+			AuthorEmail: "kneerunjun@gmail.com",
+		},
+		{
+			CoverImg: "images/purebool.png",
+			Slug:     "",
+			Title:    "Binding pure boolean values to scope of isolated Angular directives",
+			Tags: []string{
+				"angularjs", "webdev",
+			},
+			References: []map[string]string{
+				{"text": "Single Page Applications, MDN glossary", "link": "https://developer.mozilla.org/en-US/docs/Glossary/SPA"},
+			},
+			PubDate:     "28-NOV-2015",
+			PubLoc:      "Pune, India",
+			AuthorName:  "Niranjan Awati",
+			AboutAuthor: "Niranjan is an IoT junkie & GoLang developer",
+			AuthorEmail: "kneerunjun@gmail.com",
+		},
 	}
 )
 

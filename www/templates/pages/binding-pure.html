@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{ template "globals/head.html"}}
+</head>
+{{ template "globals/top-nav.html" }}
+<div class="container">
+    {{ template "globals/blog-header.html" .}}
+    <div class="col-12 col-md-10 offset-md-1 bg-dark p-5">
+        <p>
+            You’ve got an isolated element directive that needs to get values from attributes onto an isolated scope.
+            Cannot be any simpler ? Well turns out there is a small surprise in store for you. All your variables are
+            bound smoothly but when you assign a literal ‘true’ as the value it just refuses to convert that to Boolean
+            before binding.
+        </p>
+        <p>
+            Lets uncover whats happening beneath and see if we have any simple hack around it.
+        </p>
+        <p>
+            The compile function hits first and before the pre and the post get a chance the controller would initiate
+            the scope, and all the allied initialization logic. Pre and Post then follow to let you do some HTML edit
+            before and after the scope is linked to the elements respectively.
+        </p>
+        <div class="container text-center">
+            <hr class="hr" width="30%" style="margin-left: 30%;">
+            <blockquote class="blockquote">
+                <p class="mb-0 text-light">
+                    Isolated directives are simpler , in a sense all what you need to know are the simple symbols like
+                    ‘=’, ‘@’ ,’&’ and boom! angular would graciously evaluate all the html attributes with the scope
+                    items
+                </p>
+            </blockquote>
+            <hr class="hr" width="30%" style="margin-left: 30%;">
+        </div>
+        <p>
+            You may be really impressed with this feat of angular until you encounter a small pit that feels edgy and
+            sharp around the corners.
+        </p>
+        <p>
+            Supply some clean Boolean values to the manifestation of the directive and angular picks up that just like
+            any other string bypassing the evaluation of the same.
+        </p>
+    </div>
+    {{ template "globals/blog-refs.html" .}}
+</div>
+
+</html>

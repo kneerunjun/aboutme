@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{ template "globals/head.html"}}
+</head>
+{{ template "globals/top-nav.html" }}
+<div class="container">
+    {{ template "globals/blog-header.html" .}}
+    <div class="col-12 col-md-10 offset-md-1 bg-dark p-5">
+        <p>
+            For most of us programmers help page is the last on the mind. Tons of advice on the web I know on how one
+            should work well on the help pages, but eventually it just cannot snatch any priority for us developers
+            /designers. We just see the users as the ones who would be able to grasp all that thrown onto the screen the
+            moment they see it.
+        </p>
+        <p>
+            But this is not about harping to get you realize the significance of dedicated help pages. This is just to
+            give you an idea of how you can (if you are convinced you need it) build a easy help page ecosystem for your
+            angular SPA using the module routes and simple directive.
+        </p>
+        <div class="container text-center">
+            <hr class="hr" width="30%" style="margin-left: 30%;">
+            <blockquote class="blockquote">
+                <p class="mb-0 text-light">Docker changed the way we thought about environments. Suddenly with
+                    containers,maintaining separate spaces for development, staging and production seem to be a pain. I
+                    prefer setup my containers once for the project and then keep making changes to the code. Updates
+                    are pushed to GitHub and then deployment there on is just about running a couple of commands on
+                    target machine.</p>
+            </blockquote>
+            <hr class="hr" width="30%" style="margin-left: 30%;">
+        </div>
+        <p>
+            Here is how you can leave out leeway for the help pages, and given that you are employing the route Provider
+            there is a easy way of doing things.
+        </p>
+        <div class="container justify-content-center mb-3 d-none d-md-flex">
+            <img src="/images/helpdirective.jpg" width="60%" height="auto" alt="" class="img-responsive">
+        </div>
+        <div class="container justify-content-center mb-3 d-flex d-md-none">
+            <img src="/images/helpdirective.jpg" width="100%" height="auto" alt="" class="img-responsive">
+        </div>
+        <h5 class="text-primary">What is that ?</h5>
+        <ol>
+            <li>Help pages now can be progressively added as just html pieces in the respective virtual folders</li>
+            <li>Adding config statements to the module would mean you are just pointing to the help pages</li>
+        </ol>
+        <p>
+            Have a look at the gist here <a href="https://gist.github.com/kneerunjun/143272bc25071b6b1e48">GitHub
+                Gist</a> this would give you a view of what’s happening behind all the talk.
+        </p>
+        <p>
+            I found this to be slic and convenient. Help pages can just be static pages or interactive , all what you
+            now can proceed is just add htmls and append the config with more cases.
+        </p>
+        <p>
+            Give it a shot – let me know if this convincing.
+        </p>
+    </div>
+    {{ template "globals/blog-refs.html" .}}
+</div>
+
+</html>

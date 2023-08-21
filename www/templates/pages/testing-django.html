@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{ template "globals/head.html"}}
+</head>
+{{ template "globals/top-nav.html" }}
+<div class="container">
+    {{ template "globals/blog-header.html" .}}
+    <div class="col-12 col-md-10 offset-md-1 bg-dark p-5">
+        <div class="container text-center">
+            <blockquote class="blockquote">
+                <p class="mb-0 text-light">Docker changed the way we thought about environments. Suddenly with
+                    containers,maintaining separate spaces for development, staging and production seem to be a pain. I
+                    prefer setup my containers once for the project and then keep making changes to the code. Updates
+                    are pushed to GitHub and then deployment there on is just about running a couple of commands on
+                    target machine.</p>
+            </blockquote>
+        </div>
+        <p>Docker is the world’s leading software container platform. Developers use Docker to eliminate “works on my
+            machine” problems when collaborating on code with co-workers. Operators use Docker to run and manage apps
+            side-by-side in isolated containers to get better compute density. Enterprises use Docker to build agile
+            software delivery pipelines to ship new features faster, more securely and with confidence for both Linux
+            and Windows Server apps.
+        </p>
+        <div class="container d-flex justify-content-center mb-4">
+            <img src="/images/docker-schema.jpg" width="50%" height="auto" alt="" class="img-responsive">
+        </div>
+        <p>
+            Instance of MongoDB running on the docker machine actually accesses the physical data from the store on the
+            machine on the cloud. Testing a web server (Django based application running on Gunicorn) in isolation here
+            is not very straightforward as it would have been running application on a simple machine
+        </p>
+        <p>Lets have a look at what happens if we did not have the Docker container itself. </p>
+        <pre class="bg-secondary p-3 text-info">
+            ./manage.py runserver 0.0.0.0:8000
+        </pre>
+        <p>
+            You could have opened up the Django test server (on the cloud machine, without any container running) with a
+            simple command running on current directory( same as the project folder, If you have not done Django before
+            on Linux, I might as well write another blog exclusively for that.)
+        </p>
+        <p>
+            Here one needs to remember that though the data is on the same machine (cloud machine), there is no Mongo
+            instance running on the machine. Recollect that Docker container is the one who has Mongo installed , so in
+            which case you have the data but no means to access the data.
+        </p>
+        <p>
+            Counter argument could be – for testing purpose Mongo can be thought of being installed on the cloud machine
+            as well. This from my perspective defeats the entire purpose of containerization. One cannot assume host
+            machine (cloud machine) to have any or all parts of docker images replicated.
+        </p>
+        <p>Here’s how you can get things done</p>
+        <pre class="bg-secondary p-3 text-info">
+            Expose port 8000 (or any convenient )  from within the docker container
+            Run the docker container
+            Get inside the docker container using :
+            $ docker exec -it <docker container id> /bin/bash
+            Stop the Gunicorn process  – Your Django test server is better suited for debugging
+            $ pkill  <gunicorn process id></gunicorn>
+            $ ./manage.py runserver 0.0.0.0:8000 
+        </pre>
+        <p>
+            This gets the Django test server out of the shrouding into the open, remember to close it back when testing
+            is done
+        </p>
+        <p>
+            This actually exposes the test Django server outside onto the cloud , and you can test fire your API @ port
+            8000. API can access the database since the container is running + you can now even use pdb.set_trace() to
+            debug line by line.
+        </p>
+        <p>Once you are done testing :</p>
+        <pre class="bg-secondary p-3 text-info">
+            Stop Django test server
+            Stop container
+            Change image of container , remove  EXPOSE 8000 
+            Bind Gunicorn to socket file and let Nginx access that as upstream proxy
+        </pre>
+        <p> For more on how to get nginx server running <a
+                href="https://kneerunjun.wordpress.com/2017/01/21/getting-your-gunicorn-server-proxy-behind-nginx-on-a-docker-container/">
+                Here is another of my blog</a></p>
+        <p>So once after testing is done , you are shrouding Gunicorn again behind Nginx and exposing only one port 8080
+            for Nginx.</p>
+    </div>
+    {{ template "globals/blog-refs.html" .}}
+</div>
+
+</html>

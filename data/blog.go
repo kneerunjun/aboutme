@@ -118,6 +118,22 @@ var (
 			AboutAuthor: "Niranjan is an IoT junkie & GoLang developer",
 			AuthorEmail: "kneerunjun@gmail.com",
 		},
+		{
+			CoverImg: "/images/dockershipping.png",
+			Slug:     "",
+			Title:    "Testing Django apps live on docker containers",
+			Tags: []string{
+				"webdev", "docker", "django", "python", "devops",
+			},
+			References: []map[string]string{
+				{"text": "GithubGist", "link": "https://gist.github.com/kneerunjun/7d95d3c1db15c1e62352"},
+			},
+			PubDate:     "04-MAR-2017",
+			PubLoc:      "Pune, India",
+			AuthorName:  "Niranjan Awati",
+			AboutAuthor: "Niranjan is an IoT junkie & GoLang developer",
+			AuthorEmail: "kneerunjun@gmail.com",
+		},
 	}
 )
 

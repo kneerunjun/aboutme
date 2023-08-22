@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{ template "globals/head.html"}}
+</head>
+{{ template "globals/top-nav.html" }}
+<div class="container">
+    {{ template "globals/blog-header.html" .}}
+    <div class="col-12 col-md-10 offset-md-1 bg-dark p-5">
+        <p>
+            Providers are not something you use regularly. Reason-perhaps the fact that they are not as convenient as
+            services /factories. What I meant was that with no syntactic sugar it just repels any new developer. If
+            there are other ways you can have singletons why get into the hassles of have a provider at all ?
+        </p>
+        <p>
+            In the ascending order of their syntactic complexity but descending order of sophistication, any angular
+            developer would agree to arrange the services like this ..
+        </p>
+        <ol>
+            <li>Service</li>
+            <li>Factory</li>
+            <li>Provider</li>
+        </ol>
+        <p>
+            A provider is the last resort that a angular developer takes and logically so. Service / factory does the
+            same job. Why in the world then would you want a Provider ?
+        </p>
+        <div class="container text-center">
+            <hr class="hr" width="30%" style="margin-left: 30%;">
+            <blockquote class="blockquote">
+                <p class="mb-0 text-light">
+                    Simple app.config( ) takes in only providers and no other singleton services.
+                </p>
+            </blockquote>
+            <hr class="hr" width="30%" style="margin-left: 30%;">
+        </div>
+        <p>But then it does not work so easily, does it ?</p>
+        <p>
+            One of the gists <a href="https://gist.github.com/Mithrandir0x/3639232">here</a>illustrates the distinction
+            of using each in the required context and innocently misses out that when you are using a provider you need
+            to watch out for the ‘pitfall’. I must admit though the gist does a real good job of explaining the
+            differences, and no where on the web did I find anything more convincing. Not even the Misko Hevery answer
+            <a href="https://groups.google.com/forum/#!msg/angular/56sdORWEoqg/HuZsOsMvKv4J">here</a> !!
+        </p>
+        <p>
+            I was not any different than you. I was looking for resources that could explain me the difference of all
+            these services and which one is best suited for what kind of scenarios. From a distance we C# guys always
+            dreaded the JS world and this juncture when we have taken the plunge, is when we start to realize how frosty
+            the water really is.Nevertheless, once you catch the differences of all these 3 and eventually come to the
+            conclusion that they are almost all the same and then the choice of one of them then is purely a
+            convenience.
+        </p>
+        <p>You then struggle to get the provider injected in the config delegate.</p>
+        <p>See the below code .. nothing working ~!</p>
+        <div class="container justify-content-center mb-3 d-none d-md-flex">
+            <img src="/images/providernotworking.jpg" width="60%" height="auto" alt="" class="img-responsive">
+        </div>
+        <p>
+            Most of the top Google search result pages on this issues rant about how the config runs before all the
+            services are registered and the reason why you get the ‘unknown provider’ error. There is enough evidence on
+            angualrjs.org as well which can make you believe that as well..
+        </p>
+        <p>But what worked for me was again a simple tweak in the name <i class="bi bi-emoji-smile-upside-down"></i></p>
+        <div class="container justify-content-center mb-3 d-none d-md-flex">
+            <img src="/images/providerworking-2.jpg" width="60%" height="auto" alt="" class="img-responsive">
+        </div>
+        <p>
+            Providers work when you drop the ‘Provider’ name appendix from the registration ! AHA!, now that things are
+            working fine againt lets get back to coding on our superhero JS framework.
+        </p>
+        
+    </div>
+    {{ template "globals/blog-refs.html" .}}
+</div>
+
+</html>

@@ -166,6 +166,22 @@ var (
 			AboutAuthor: "Niranjan is an IoT junkie & GoLang developer",
 			AuthorEmail: "kneerunjun@gmail.com",
 		},
+		{
+			CoverImg: "images/angular-3.jpg",
+			Slug:     "",
+			Title:    "Nomenclature blip in AngularJS providers",
+			Tags: []string{
+				"angularjs", "webdev", "javascript",
+			},
+			References: []map[string]string{
+				{"text": "Single Page Applications, MDN glossary", "link": "https://developer.mozilla.org/en-US/docs/Glossary/SPA"},
+			},
+			PubDate:     "10-OCT-2015",
+			PubLoc:      "Pune, India",
+			AuthorName:  "Niranjan Awati",
+			AboutAuthor: "Niranjan is an IoT junkie & GoLang developer",
+			AuthorEmail: "kneerunjun@gmail.com",
+		},
 	}
 )
 

@@ -1,5 +1,11 @@
 package data
 
+/*================
+For each of the blogs there is metadata that is stored onto the database
+This has identification and references of the blog but NOT the content
+File here describes the datamodel of such, and also the seed data
+================*/
+
 import (
 	"fmt"
 	"regexp"
@@ -12,13 +18,14 @@ import (
 // skeleton information of the blog
 // blog body to be loaded as html from the page
 type Blog struct {
-	CoverImg    string              `bson:"coverimg" json:"coverimg"`
-	Slug        string              `bson:"slug" json:"slug"`
+	CoverImg    string              `bson:"coverimg" json:"coverimg"` // cover image appears on the blog page
+	Slug        string              `bson:"slug" json:"slug"`         // slug that uniquely represents the blog also appears in the url as text. Is derived from the title see :SlugifyTitle
 	Title       string              `bson:"title" json:"title"`
+	Summary     string              `bson:"summary" json:"summary"`
 	Tags        []string            `bson:"tags" json:"tags"`
 	References  []map[string]string `bson:"refs" json:"refs"`
-	PubDate     string              `bson:"pubdate" json:"pubdate"`
-	PubLoc      string              `bson:"publoc" json:"publoc"`
+	PubDate     string              `bson:"pubdate" json:"pubdate"` // date of publishing the blog
+	PubLoc      string              `bson:"publoc" json:"publoc"`   //location from which the blog was published
 	AuthorName  string              `json:"author" bson:"author"`
 	AboutAuthor string              `bson:"aboutauthor" json:"aboutauthor"`
 	AuthorEmail string              `bson:"authoremail" json:"authoremail"`
@@ -26,6 +33,13 @@ type Blog struct {
 
 // SlugifyTitle : takes the title of the blog and makes a abrdiged string that can used as a slug
 // this slug can be used to uniquely identify the blog in the database
+// also the slug gets used in the url as the url param to uniquely identify the blog yet keep it human readable.
+/*
+	sampleTitle := "this is a sample title"
+	abridged, _:= Slugify(sampleTitle)
+	fmt.Println(abridged)
+	// "this-is"
+*/
 func SlugifyTitle(title string) (string, error) {
 	// this is the pattern we are looking for in the title
 	titlPtrn, err := regexp.Compile(`^[\w\d]+[\s]*[\w\d]*`)
@@ -49,6 +63,9 @@ func SlugifyTitle(title string) (string, error) {
 	return result, nil
 }
 
+// below is the seed of all the blogs.
+// All the blogs that I'd written were on multiple sites, hence getting them under one roof
+// https://kneerunjun.wordpress.com/
 var (
 	blogSeed = []Blog{
 		{
@@ -69,6 +86,7 @@ var (
 			AuthorName:  "Niranjan Awati",
 			AboutAuthor: "Niranjan is an IoT junkie & GoLang developer",
 			AuthorEmail: "kneerunjun@gmail.com",
+			Summary:     "When measuring low level analogue voltages would you use a chip or roll up your own. Say you are onto a prototype, what would be your choice?",
 		},
 		{
 			CoverImg: "/images/angularjs.png",
@@ -85,6 +103,7 @@ var (
 			AuthorName:  "Niranjan Awati",
 			AboutAuthor: "Niranjan is an IoT junkie & GoLang developer",
 			AuthorEmail: "kneerunjun@gmail.com",
+			Summary:     "Tabs aren't a popular choice when it comes to mobile-first design. Just incase you need an angularjs directive to get an array of tabs up and running in no time",
 		},
 		{
 			CoverImg: "/images/angularphoto.jpg",
@@ -101,6 +120,7 @@ var (
 			AuthorName:  "Niranjan Awati",
 			AboutAuthor: "Niranjan is an IoT junkie & GoLang developer",
 			AuthorEmail: "kneerunjun@gmail.com",
+			Summary:     "Bending your mind around the 'deep-sea' concepts of Angualrjs. Rarely used in common scenarious but can make your life a tad bit easier when understood.",
 		},
 		{
 			CoverImg: "/images/angularrelativity.png",
@@ -117,6 +137,7 @@ var (
 			AuthorName:  "Niranjan Awati",
 			AboutAuthor: "Niranjan is an IoT junkie & GoLang developer",
 			AuthorEmail: "kneerunjun@gmail.com",
+			Summary:     "Caution when using $broadcast( ) in AngularJS",
 		},
 		{
 			CoverImg: "/images/dockershipping.png",
@@ -133,6 +154,7 @@ var (
 			AuthorName:  "Niranjan Awati",
 			AboutAuthor: "Niranjan is an IoT junkie & GoLang developer",
 			AuthorEmail: "kneerunjun@gmail.com",
+			Summary:     "On how to quickstart setting up docker containers for Django Apps. Sounds very basic but a couple of easy pitfalls can waste a lot of effort.",
 		},
 		{
 			CoverImg: "images/helppage.jpg",
@@ -149,6 +171,7 @@ var (
 			AuthorName:  "Niranjan Awati",
 			AboutAuthor: "Niranjan is an IoT junkie & GoLang developer",
 			AuthorEmail: "kneerunjun@gmail.com",
+			Summary:     "Everyone needs help pages, its so frustrating to not find any when required the most. Here is how you can jumpstart",
 		},
 		{
 			CoverImg: "images/purebool.png",
@@ -165,6 +188,7 @@ var (
 			AuthorName:  "Niranjan Awati",
 			AboutAuthor: "Niranjan is an IoT junkie & GoLang developer",
 			AuthorEmail: "kneerunjun@gmail.com",
+			Summary:     "",
 		},
 		{
 			CoverImg: "images/angular-3.jpg",
@@ -181,6 +205,7 @@ var (
 			AuthorName:  "Niranjan Awati",
 			AboutAuthor: "Niranjan is an IoT junkie & GoLang developer",
 			AuthorEmail: "kneerunjun@gmail.com",
+			Summary:     "AngularJS providers have that tiny dark spot, miss it and it can pester you for hours. Save time and read this before you make your own providers.",
 		},
 	}
 )

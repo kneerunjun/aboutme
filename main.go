@@ -84,6 +84,19 @@ func MakeInsertDBConn(collName string) gin.HandlerFunc {
 	}
 }
 
+// CloseDBconn : closes the database connection on the way out
+func CloseDBconn(c *gin.Context) {
+	val, ok := c.Get("conn")
+	if !ok {
+		return
+	}
+	coll, _ := val.(*mgo.Collection)
+	if coll == nil {
+		return
+	}
+	coll.Database.Session.Close()
+}
+
 /*
 ================
 Middleware that helps insert the db connection to the chain of handlers.
@@ -149,6 +162,7 @@ func renderBlogList(c *gin.Context) {
 	if searchPhrase != "" {
 		result.ClearSearch = true
 	}
+
 	log.WithFields(log.Fields{
 		"count_blogs": len(result.List),
 	}).Debug("requested for the list of all the blogs")
@@ -303,9 +317,9 @@ func main() {
 			"app": "aboutme",
 		})
 	})
-	r.GET("/myprofile/:userid", InsertDBConn, renderMyProfile)
-	r.GET("/blogs/", MakeInsertDBConn("blogs"), renderBlogList)
-	r.GET("/blogs/:blogid", MakeInsertDBConn(data.BLOGS_COLL), renderBlog)
+	r.GET("/myprofile/:userid", InsertDBConn, renderMyProfile, CloseDBconn)
+	r.GET("/blogs/", MakeInsertDBConn("blogs"), renderBlogList, CloseDBconn)
+	r.GET("/blogs/:blogid", MakeInsertDBConn(data.BLOGS_COLL), renderBlog, CloseDBconn)
 	// r.GET("/views/:name", InsertDBConn, ServeView)
 	log.Fatal(r.Run(":8080"))
 }

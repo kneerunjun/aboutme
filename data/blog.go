@@ -14,6 +14,14 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// BlogListResult : on the page where you have list of all the blogs with search feature
+// this has a list of all the blogs + some flags for the UI components
+type BlogListResult struct {
+	List        []Blog `json:"list"`        // actual result
+	ClearSearch bool   `json:"clearsearch"` // if the list is based on search, the clear button can help you get back to listing all the blogs
+
+}
+
 // Blog : the database model to record the blog
 // skeleton information of the blog
 // blog body to be loaded as html from the page

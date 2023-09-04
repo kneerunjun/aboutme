@@ -6,14 +6,19 @@
 </head>
 {{ template "globals/top-nav.html" }}
 <div class="row mt-4">
-    <div class="col-8 offset-2 col-md-6 offset-md-3">
-        <form action="/blogs?" method="get">
+    <div class="col-10 offset-1 col-md-6 offset-md-3">
+        <form action="/blogs" method="get">
             <div class="form-group">
                 <div class="form-group">
                     <div class="input-group mb-3">
                         <input name="search" value="" type="text" class="form-control"
                             aria-label="Search for blog title" placeholder="Search for titles..">
-                        <input class="input-group-text" type="submit"></input>
+                        <button type="submit" class="input-group-text text-dark btn-info"><i class="fas fa-search"></i></button>
+                        {{ if eq .ClearSearch true}}
+                            <button type="button" onclick="window.location.href='/blogs/';" class="input-group-text text-dark btn-info">
+                                <i class="far fa-times-circle"></i>
+                            </button>
+                        {{ end }}
                     </div>
                 </div>
             </div>
@@ -21,7 +26,7 @@
     </div>
 </div>
 <div class="row mt-5">
-    {{ range $key, $val := . }}
+    {{ range $key, $val := .List }}
     {{ template "globals/blog-preview.html" $val}}
     {{ end }}
 </div>

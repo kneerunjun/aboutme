@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{ template "globals/head.html"}}
+</head>
+<body>
+    <div class="row mt-5">
+        <div class="col-10 offset-1 col-md-4 offset-md-4">
+            <div class="alert alert-dismissible alert-danger">
+                <h1><i class="fas fa-exclamation-triangle"></i>&nbsp;{{.Code}}&nbsp;{{.Status}}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <strong><h2>Oh snap!</h2></strong> <br>{{.Msg}}
+                <a href="{{.GoBack}}" type="button" class="btn btn-light btn-block mt-3"><i class="fas fa-undo-alt"></i>&nbsp;Go back</a>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>

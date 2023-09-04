@@ -14,6 +14,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"regexp"
 
 	"github.com/gin-gonic/gin"
 	"github.com/kneerunjun/aboutme/data"
@@ -104,6 +105,7 @@ func ServeIndexHtml(c *gin.Context) {
 
 // renderBlogList : this sends out a list of all the blogs chrnologically
 // from there on the link to the actual blog
+// this also caters to list of blogs that are filtered on the search bar
 func renderBlogList(c *gin.Context) {
 	val, ok := c.Get("conn")
 	if !ok {
@@ -111,17 +113,44 @@ func renderBlogList(c *gin.Context) {
 		c.AbortWithStatus(http.StatusBadGateway)
 		return
 	}
+	searchPhrase := c.Query("search") // this is when user is trying to search for specific blogs with title
+	pttrnMtch := (regexp.MustCompile(`^[\w\d\s]*$`)).Match([]byte(searchPhrase))
+	if !pttrnMtch {
+		log.WithFields(log.Fields{
+			"phrase": searchPhrase,
+		}).Warn("Suspicious search phrase")
+		c.HTML(http.StatusBadRequest, "400.html", data.ErrPayload{
+			Code:   http.StatusBadRequest,
+			Msg:    "Invalid search phrase,Search phrases are simple alphanumeric for searching the blogs by the title. Check the search phrase and try all over again",
+			Status: "Bad Request",
+			GoBack: "/blogs/",
+		})
+		return
+	}
+	flt := bson.M{}
+	if searchPhrase != "" {
+		// https://stackoverflow.com/questions/10610131/checking-if-a-field-contains-a-string
+		flt = bson.M{"title": bson.M{"$regex": searchPhrase, "$options": "i"}}
+		log.WithFields(log.Fields{
+			"phrase": searchPhrase,
+		}).Debug("we have a search phrase")
+	}
+
 	coll, ok := val.(*mgo.Collection) // blogs collection
 	if !ok {
 		log.Error("invalid object for mgo.Collection, check and try again")
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
-	result := []data.Blog{}          // result list of all the blogs
-	coll.Find(bson.M{}).All(&result) // getting the list of all the blogs
 
+	result := data.BlogListResult{List: []data.Blog{}, ClearSearch: false} // result list of all the blogs
+	coll.Find(flt).All(&result.List)                                       // getting the list of all the blogs
+	// Settign the clear flag
+	if searchPhrase != "" {
+		result.ClearSearch = true
+	}
 	log.WithFields(log.Fields{
-		"count_blogs": len(result),
+		"count_blogs": len(result.List),
 	}).Debug("requested for the list of all the blogs")
 	c.HTML(http.StatusOK, "blog-list.html", result)
 }

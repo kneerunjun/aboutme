@@ -215,6 +215,21 @@ var (
 			AuthorEmail: "kneerunjun@gmail.com",
 			Summary:     "AngularJS providers have that tiny dark spot, miss it and it can pester you for hours. Save time and read this before you make your own providers.",
 		},
+		{
+			CoverImg: "images/raspwifi.jpg",
+			Slug:     "",
+			Title:    "Autoconnect WiFi on Raspbian Stretch",
+			Tags: []string{
+				"raspberrypi", "wifi", "network",
+			},
+			References:  []map[string]string{},
+			PubDate:     "05-JUN-2018",
+			PubLoc:      "Pune, India",
+			AuthorName:  "Niranjan Awati",
+			AboutAuthor: "Niranjan is an IoT junkie & GoLang developer",
+			AuthorEmail: "kneerunjun@gmail.com",
+			Summary:     "Unless you are a beginner you'd be running raspbian on headless mode on all your Pis. Here is how you can auto connect WiFi on your device on setup.",
+		},
 	}
 )
 

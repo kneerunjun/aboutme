@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{ template "globals/head.html"}}
+</head>
+{{ template "globals/top-nav.html" }}
+<div class="container">
+    {{ template "globals/blog-header.html" .}}
+    <div class="col-12 col-md-10 offset-md-1 bg-dark p-5">
+        <p>
+            Unless you are powering up your <a target="_blank" href="https://www.raspberrypi.com/">PI</a> for the maiden time, you would always want to start it up in headless mode.
+            Frills of having a GUI loaded are not worth, given that they do offer a level of convenience but only at the initial setup. Once you have established the SSH tunnel, GUI finds mot much use. One such in case is that of auto connecting to the WiFi when the device bootsup. This is all the more relevant if you are using a  <a target="_blank" href="https://www.raspberrypi.com/products/raspberry-pi-zero-w/">RPi 0w</a> which has no LAN port atall. When the device boots up you want it to connect to your WiFi with a valid port so that you can just ssh and start development.
+        </p>
+        <p>
+            There are tons of things on the internet but this is what works ,and with the new versions of
+            Stretch you may land up in trouble, so here is a sure shot way of getting this connected over your wifi 
+        </p>
+        <p>
+        <pre>$ sudo nano /etc/wpa_supplicant/wpa_supplicant.conf</pre> Or from windows when you are editing the
+        wpa_supplicant.conf file on the boot sector of your SD card What the internet shows you is only the network
+        section, but unless you get the top section also in it would not connect on Wifi with static IP
+        </p>
+        <pre class="bg-secondary p-3 text-info">
+            ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+            update_config=1
+            country=IN
+
+            network={
+                ssid="SSID"
+                psk="YourPassword"
+                key_mgmt=WPA-PSK
+            }
+        </pre>
+        <p>
+            There are many forums that advise you to edit /etc/network/interfaces but if you have Raspbian Jessie this
+            would not work as the entire of network configuration has been shifted to /etc/dhcpcd.conf so just sudo nano
+            and put the below lines in your conf file.
+        </p>
+        <pre class="bg-secondary p-3 text-info">
+            interface eth0
+            static ip_address=192.168.1.10
+            static routers=192.168.1.1
+            interface wlan0
+            static ip_address=192.168.1.10
+            static routers=192.168.1.1
+        </pre>
+        <p>And most important of all replace the contents of /etc/network/interfaces as they were earlier</p>
+        <pre class="bg-secondary p-3 text-info">
+            # interfaces(5) file used by ifup(8) and ifdown(8)
+
+            # Please note that this file is written to be used with dhcpcd
+            # For static IP, consult /etc/dhcpcd.conf and 'man dhcpcd.conf'
+            
+            
+            # Include files from /etc/network/interfaces.d:
+            source-directory /etc/network/interfaces.d
+            
+            auto lo
+            iface lo inet loopback
+            iface eth0 inet manual
+            allow-hotplug wlan0
+            iface wlan0 inet manual
+             wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+        </pre>
+        <p>if these contents are missing it may not connect to the WiFi atall, I dont know what RPi engineers did at all
+            , but now it seems Jessie is using both interfaces and dhcpcd.conf</p>
+    </div>
+    {{ template "globals/blog-refs.html" .}}
+</div>
+
+</html>

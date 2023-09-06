@@ -1,0 +1,2 @@
+Need a replacement for the resume & single place where I have my blogs. 
+While there are many tools that can make an enticing resume, a personal website has its own charm. A resume only gives a quick view of me, but recruiters who need to know me in depth will want to visit the website to get a comprehensive insight to me as a personality. Plus a website kind of emits reliability. A person with a website is less likely to over-quote / false quote in his resume :)

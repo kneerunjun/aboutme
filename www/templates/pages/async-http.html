@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{ template "globals/head.html"}}
+</head>
+{{ template "globals/top-nav.html" }}
+<div class="container">
+    {{ template "globals/blog-header.html" .}}
+    <div class="col-12 col-md-10 offset-md-1 bg-dark p-5">
+        <h5 class="text-primary">Prelude</h5>
+        <hr class="hr">
+        <p>
+            You have a set of I/O tasks that can be asynchronized. For a given hardware and differential number of tasks
+            and worker co-routines you are keen to benchmark performance. Expecting a performance gain as the number of
+            threads (or co-routines) go up and then it plateaus for a given load & hardware.
+        </p>
+        <p>
+            Lets use <a target="_blank" href="https://xkcd.com/">xkcd</a>, a webcomics site
+            that has a pile of stick-man comics. If you
+            head over to <a target="_blank" href="https://xkcd.com/json.html">this page</a> you'd notice they have an
+            API to let you
+            download json meta data for
+            each of the comics they have. This page illsutrates the formation of the url to download such json comics.
+            <br> Just as an example comic 614 can be download using <a target="_blank"
+                href="https://xkcd.com/614/info.0.json">this
+                link</a>
+        </p>
+        <h5 class="text-primary">JSON over HTTP</h5>
+        <hr class="hr">
+        <p>
+            Here is the code to get JSON comic data over HTTP. Data thus received is then packed onto a
+            map[string]interface{}
+        </p>
+        <pre class="bg-secondary">
+            <code>
+                func FetchJsonComic(comicID int) (map[string]interface{}, error) {
+                    url := fmt.Sprintf("https://xkcd.com/%d/info.0.json", comicID)
+                    req, err := http.NewRequest("GET", url, nil)
+                    if err != nil {
+                        return nil, fmt.Errorf("failed to form the request, aborting")
+                    }
+                    client := http.Client{
+                        Timeout: 5 * time.Second,
+                    }
+                    resp, err := client.Do(req)
+                    if err != nil {
+                        return nil, fmt.Errorf("failed to send request,check network connection %s", url)
+                    }
+                    // Reading the result
+                    result := map[string]interface{}{} // this is what onto which we unmarshal the result
+                    defer resp.Body.Close()
+                
+                    if resp.StatusCode != 200 {
+                        return nil, fmt.Errorf("http error, error getting the comic %s", err)
+                    }
+                    // unmarshall read the body only if the status was 200 ok
+                    byt, err := io.ReadAll(resp.Body)
+                    if err != nil {
+                        return nil, fmt.Errorf("error reading the response %s", err)
+                    }
+                    if json.Unmarshal(byt, &result) != nil {
+                        return nil, fmt.Errorf("error unmarshaling data %s", err)
+                    }
+                    // fmt.Println(url)
+                    // fmt.Printf("Comic: %f, Title: %s, Caption: %s", result["num"], result["safe_title"], result["alt"])
+                    return result, nil
+                
+                }
+            </code>
+        </pre>
+        <p>
+            You'd notice the function returns an error incase of
+        <ul>
+            <li>No internet connection.</li>
+            <li>HTTP response from the server wasnt favourable.</li>
+            <li>Payload in the server response wasn't as expected.</li>
+        </ul>
+        For brevity sake we have hardcoded the url with only the ID of the comic as variable integer. <br>This function
+        uses a simple http Client with a timeout of 5 seconds. We are assuming the payload to be JSON, as per the
+        documentation <a target="_blank" href="https://xkcd.com/json.html">here</a>
+        </p>
+        <h5 class="text-primary">Number of workers v/s Jobs</h5>
+        <hr class="hr">
+        <pre class="bg-secondary">
+            <code>
+                const (
+                    MAX_WORKERS = 32 // direct corelation to the performance
+                    MAX_JOBS    = 50 // change this to bump up the number of jobs that need to be fired
+                )
+                func main() {
+                    for result := range worker_pool(MAX_WORKERS, jobs) {
+                        fmt.Println(result["num"], result["safe_title"])
+                    }
+                }
+                func worker_pool(workers int, jobs chan int) chan map[string]interface{} {
+                    results := make(chan map[string]interface{}, len(jobs))
+                    go func() {
+                        var wg sync.WaitGroup
+                        for i := 0; i < workers; i++ {
+                            wg.Add(1)
+                            go func() {
+                                worker(jobs, results)
+                                wg.Done()
+                            }()
+                        }
+                        wg.Wait()
+                        close(results)
+                    }()
+                    return results
+                }
+                func worker(jobs <-chan int, result chan<- map[string]interface{}) {
+                    for val := range jobs {
+                        data, err := FetchJsonComic(val)
+                        if err != nil {
+                            fmt.Println(err)
+                        }
+                        result <- data
+                    }
+                }
+            </code>
+        </pre>
+        <p class="justify-content-left">
+            Configurable constants on the top are handles on the moving parts in this benchmark. Changing any of these
+            can emit distinct results. We are to use the same to perform various combinative benchmarks to arrive at a
+            conclusion. A worker pool which is responsible for firing up all the worker threads also owns the
+            communication channel. Channel accumulates all the results, that are simply printed out in the main
+            coroutine. Incase a worker thred encounters an error it gets printed out but nothing is dispatched over
+            the channel.
+        </p>
+        <p>
+            <!-- results from the test on my machine  -->
+        </p>
+    </div>
+    {{ template "globals/blog-refs.html" .}}
+</div>
+
+</html>

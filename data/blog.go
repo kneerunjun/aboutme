@@ -230,6 +230,21 @@ var (
 			AuthorEmail: "kneerunjun@gmail.com",
 			Summary:     "Unless you are a beginner you'd be running raspbian on headless mode on all your Pis. Here is how you can auto connect WiFi on your device on setup.",
 		},
+		{
+			CoverImg: "images/goasync.jpg",
+			Slug:     "",
+			Title:    "Async HTTP JSON download using Go Coroutines",
+			Tags: []string{
+				"golang", "async", "go routines",
+			},
+			References:  []map[string]string{},
+			PubDate:     "05-JUN-2023",
+			PubLoc:      "Pune, India",
+			AuthorName:  "Niranjan Awati",
+			AboutAuthor: "Niranjan is an IoT junkie & GoLang developer",
+			AuthorEmail: "kneerunjun@gmail.com",
+			Summary:     "Here is a simple working example of how you can download JSON over HTTP asynchronously using GO. We then baseline test for given worker threads and load.",
+		},
 	}
 )
 

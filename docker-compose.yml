@@ -33,6 +33,9 @@ services:
       - LOG_VERBOSITY=${VERBOSE}
       - FILE_LOG=${FLOG}
       - DB_SEED=${SEED}
+      # - GMAIL_APPPASS=imbilafrkzilxvwv
+      - GMAIL_SENDER=awati.niranjan@gmail.com
+      - RESUME_PATH=/var/www/aboutme/docs/niranjan-awati-cv-compact.pdf
     ports:
       - 8080:8080
     volumes:
@@ -44,7 +47,13 @@ services:
     container_name: ctn_web
     networks:
       - dev-network
+    secrets:
+      - smtp_secret
     entrypoint: ["${BINDIR}/entry.sh"]
 networks:
   dev-network:
     driver: bridge
+secrets:
+  smtp_secret:
+    file:
+      ./google.secret 

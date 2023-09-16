@@ -10,7 +10,7 @@ ARG BIN
 ARG APPNAME
 ARG STATICDIR
 RUN apk add git
-RUN mkdir -p ${SRC} && mkdir -p ${LOG} && mkdir -p ${RUN} && mkdir -p ${ETC} && mkdir -p ${STATICDIR}/{pages,images,js}
+RUN mkdir -p ${SRC} && mkdir -p ${LOG} && mkdir -p ${RUN} && mkdir -p ${ETC} && mkdir -p ${STATICDIR}/{pages,images,js,docs}
 WORKDIR ${SRC}
 # # getting  all the shells to an executable location
 # RUN touch mycron

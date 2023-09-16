@@ -10,6 +10,7 @@ Here are some confessions as well ..
 -----
 Cardinal aim is to host my profile on the web. This is with a aim to create the standout effect for recruiters. While for most of the cases the resume does the job well, if any recruiter is seeking more insight this website can give him/her exactly that. Moreover it also gives a sense of reliability to the persona. Had you faked any part of your profile would you have the audacity to put on a website for the whole world to see ?
 Then again, a website also stands as a testimonial for your skills - `Golang` `HTTP REST JSON` `Git` `Docker` `Kubernetes` and slightly virtue signalling with `Mongo` as well :)
+- Lets you requsest to email resume 
 
 ### All the blogs at one place:
 ------
@@ -26,3 +27,14 @@ We use MongoDB as a small database.
 
 ### Spinning up the containers:
 -------
+
+### How to access:
+-----
+
+### How to add more blog content ?:
+--------
+
+
+### How to change profile? :
+-------
+

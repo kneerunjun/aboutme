@@ -1,0 +1,81 @@
+<!-- this page here is presented when the user requests resume in pdf format  -->
+<!-- employs a simple request form, getting a few details from the requestor 
+- email of the requestor
+- company of the requestor 
+- part time / full time / quick evalution  opportunity
+when successfully emailed this displays the success message 
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{ template "globals/head.html"}}
+</head>
+
+<body>
+    {{ template "globals/top-nav.html" }}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-10 offset-1 col-md-6 offset-md-3">
+                {{if eq .emailed false}}
+                <form action="/notifications/email/myprofile" method="post">
+                    <fieldset>
+                        <legend>Request resume</legend>
+                        <hr class="hr">
+                        <div class="form-group">
+                            <label for="email" class="form-label text-info">
+                                <h5>Your email</h5>
+                            </label>
+                            <input name="reqemail" value="" type="email" placeholder="ex: john_smith@somedomain.com"
+                                class="form-control" id="requestorEmail">
+                            <small class="form-text text-muted">I need your email for reference only. Be assured, will
+                                never propogate this information any further</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="company" class="form-label text-info">
+                                <h5>Your company</h5>
+                            </label>
+                            <input name="reqcompany" value="" type="text" placeholder="ex: A-B-C Technologies, India"
+                                class="form-control" id="requestorCompany">
+                            <small class="form-text text-muted">This again is just for my reference, just so that I know
+                                you are downloading my resume for legit purposes</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="emptype" class="form-label text-info">
+                                <h5>Type of engagement</h5>
+                            </label>
+                            <select name="engmntype" id="sel-engagement" class="form-select">
+                                <option value="fulltime">Full-time</option>
+                                <option value="parttime">Part-time</option>
+                                <option value="eval">Quick evaluation only</option>
+                            </select>
+                            <small class="form-text text-muted">Let me know what type of engagement are you
+                                proposing</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="emailbody" class="form-label text-info">
+                                <h5>Any message you want to send me</h5>
+                            </label>
+                            <textarea name="emailbody" id="email-body" rows="8" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-block btn-info">Resume on email</button>
+                        </div>
+                    </fieldset>
+                </form>
+                {{ else }}
+                <h1 class="display-1 text-success text-center">
+                    <i class="far fa-check-circle"></i>
+                    Thanks!
+                </h1>
+                <p>We have emailed you the copy of the resume, kindly check at {{.emailto}}. Incase you still dont
+                    receive it time, you can write to me <a target="_blank"
+                        href="emailto:kneerunjun@gmail.com">kneerunjun@gmail.com</a></p>
+                <a type="button" class="btn btn-block btn-outline-info" href="/myprofile/niranjanawati">Go back</a>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

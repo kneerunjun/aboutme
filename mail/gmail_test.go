@@ -8,7 +8,7 @@ import (
 )
 
 func TestNewMailNotify(t *testing.T) {
-	notify, err := NewMailNotify(MailConfig{Host: "smtp.gmail.com", Port: 587, UName: "awatiniranjan@gmail.com", Passwd: "imbilafrkzilxvwv"}, reflect.TypeOf(&GmailNotify{}))
+	notify, err := NewMailNotify(MailConfig{Host: "smtp.gmail.com", Port: 587, UName: "awatiniranjan@gmail.com", Passwd: ""}, reflect.TypeOf(&GmailNotify{}))
 	assert.Nil(t, err, "Unexpected error creating new notify object")
 	assert.NotNil(t, notify, "Unexpected nil value on notify object")
 }

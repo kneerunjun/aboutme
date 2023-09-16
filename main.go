@@ -182,7 +182,7 @@ func RequestProfileOnEmail(c *gin.Context) {
 		}
 		// Starting a new instance of a notifier
 		notifier, err := gmail.NewMailNotify(gmail.MailConfig{
-			Host: "smtp.gmail.com", Port: 587, UName: "awatiniranjan@gmail.com", Passwd: "imbilafrkzilxvwv",
+			Host: "smtp.gmail.com", Port: 587, UName: "awatiniranjan@gmail.com", Passwd: "",
 		}, reflect.TypeOf(&gmail.GmailNotify{}))
 		if err != nil {
 			// Gateway error - this should go into the cookie followed by a redirect request
